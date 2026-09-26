@@ -1,0 +1,8 @@
+_site/
+# Personal pages live on the orphan `picks` branch, force-pushed by the
+# generator, so a removed page leaves no history on main.
+picks/
+# Local agent runbook and the request queue (it holds real usernames).
+*.local.md
+*.local.sh
+requests.txt

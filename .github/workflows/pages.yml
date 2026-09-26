@@ -1,0 +1,68 @@
+name: Deploy Pages
+
+# Publishes recomendarr.nichtlegacy.com. This repo is public and holds no user
+# data: the personal pages live in the private repo nichtlegacy/recomendarr-picks,
+# read here with a read-only deploy key (secret PICKS_DEPLOY_KEY). A push there
+# can't trigger this workflow, so the generator dispatches it after every deploy.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'scripts/build_site.sh'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write  # to delete this run's artifact once it is deployed
+
+# One deploy at a time, newest wins: the site is a snapshot, so an in-flight
+# older build has nothing worth finishing.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      # No continue-on-error: if the pages can't be read, the deploy stops here
+      # instead of publishing a site where every shared link is a 404.
+      - name: Check out personal pages
+        uses: actions/checkout@v7
+        with:
+          repository: nichtlegacy/recomendarr-picks
+          ref: picks
+          ssh-key: ${{ secrets.PICKS_DEPLOY_KEY }}
+          path: picks
+          persist-credentials: false
+      - name: Build site
+        run: scripts/build_site.sh
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+          retention-days: 1
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+      # In a public repo any signed-in GitHub user can download a run's artifacts,
+      # and this one is the whole site, every personal page included. Pages has its
+      # copy once the deploy is done, so the artifact goes, even if the deploy failed.
+      - name: Delete the site artifact
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" --jq '.artifacts[].id' \
+            | xargs -r -I{} gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/{}"

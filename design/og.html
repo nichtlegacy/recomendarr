@@ -1,0 +1,45 @@
+<!doctype html>
+<!-- Source of site/og.png (1200x630). Re-render: open this file at 1200x630 in a
+     browser and take a screenshot, e.g. with Playwright:
+     page.set_viewport_size(1200, 630); page.goto("file://…/design/og.html"); page.screenshot(path="site/og.png") -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0C0F12; }
+  body { display: grid; grid-template-columns: 300px 1fr; align-items: center; gap: 64px; padding: 0 96px; box-sizing: border-box;
+         font-family: system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; position: relative; }
+  body::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 400px at 18% 50%, rgba(0, 224, 84, .10), transparent 70%); }
+  .icon { position: relative; width: 300px; height: 300px; border-radius: 66px; box-shadow: 0 0 0 1px rgba(221, 238, 255, .10), 0 28px 60px rgba(0, 0, 0, .55); }
+  .icon svg { width: 100%; height: 100%; display: block; }
+  .copy { position: relative; }
+  .wordmark { color: #DDEEFF; font-weight: 900; font-size: 26px; letter-spacing: -0.02em; text-transform: uppercase; }
+  h1 { margin: 22px 0 0; color: #DDEEFF; font: 400 64px/1.06 Georgia, "Times New Roman", serif; letter-spacing: -0.02em; }
+  p { margin: 26px 0 0; color: #99AABB; font-size: 26px; line-height: 1.4; }
+  p b { color: #00E054; font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="225" fill="#12161A"/>
+  <rect x="270" y="176" width="580" height="672" rx="64" fill="#DDEEFF"/>
+  <g fill="#DDEEFF" stroke="#12161A" stroke-width="20">
+    <rect x="146" y="298" width="170" height="60" rx="30"/>
+    <rect x="146" y="468" width="170" height="60" rx="30"/>
+    <rect x="146" y="638" width="170" height="60" rx="30"/>
+  </g>
+  <rect x="372" y="262" width="404" height="248" rx="32" fill="#12161A"/>
+  <g fill="#DDEEFF"><rect x="396" y="288" width="36" height="44" rx="10"/><rect x="396" y="364" width="36" height="44" rx="10"/><rect x="396" y="440" width="36" height="44" rx="10"/><rect x="716" y="288" width="36" height="44" rx="10"/><rect x="716" y="364" width="36" height="44" rx="10"/><rect x="716" y="440" width="36" height="44" rx="10"/></g>
+  <g stroke-width="10" stroke-linejoin="round">
+    <path fill="#00E054" stroke="#00E054" d="M394.0 596.0 L405.9 623.6 L435.8 626.4 L413.2 646.3 L419.9 675.6 L394.0 660.2 L368.1 675.6 L374.8 646.3 L352.2 626.4 L382.1 623.6Z M484.0 596.0 L495.9 623.6 L525.8 626.4 L503.2 646.3 L509.9 675.6 L484.0 660.2 L458.1 675.6 L464.8 646.3 L442.2 626.4 L472.1 623.6Z M574.0 596.0 L585.9 623.6 L615.8 626.4 L593.2 646.3 L599.9 675.6 L574.0 660.2 L548.1 675.6 L554.8 646.3 L532.2 626.4 L562.1 623.6Z M664.0 596.0 L675.9 623.6 L705.8 626.4 L683.2 646.3 L689.9 675.6 L664.0 660.2 L638.1 675.6 L644.8 646.3 L622.2 626.4 L652.1 623.6Z"/>
+    <path fill="#8899AA" stroke="#8899AA" d="M754.0 596.0 L765.9 623.6 L795.8 626.4 L773.2 646.3 L779.9 675.6 L754.0 660.2 L728.1 675.6 L734.8 646.3 L712.2 626.4 L742.1 623.6Z"/>
+  </g>
+</svg>
+</div>
+  <div class="copy">
+    <div class="wordmark">Recomendarr</div>
+    <h1>What to watch next, from what you already loved.</h1>
+    <p>Film picks from your Letterboxd diary, <b>each with its reason</b>.</p>
+  </div>
+</body>
+</html>

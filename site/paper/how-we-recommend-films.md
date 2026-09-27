@@ -1,50 +1,76 @@
 # How Recomendarr Recommends Films
 
-**An explainable, Letterboxd-native recommender: design, scoring model and a temporal holdout evaluation**
+**An explainable Letterboxd recommender, what stronger baselines revealed about it, and the two-lane design that followed**
 
 ![A personal pick list: 100 films, each with the reason it was chosen](./assets/screenshots/picks-hero.png)
 
 ## Abstract
 
-Recomendarr turns a Letterboxd diary into a ranked list of films the user has
-not seen, and shows the reason behind every point of every score. It does not
-learn embeddings or a neural ranker. It builds a weighted taste profile from
-ratings, likes and rewatches, uses that profile to pick about 20 Letterboxd
-pages as a candidate pool, adds films Letterboxd lists as similar to the
-user's favourites, and ranks the pool with a small set of capped, additive
-terms. A diversity pass then reorders the list.
+Recomendarr turns a Letterboxd diary into films the user has not seen and
+explains every recommendation. Version 1 of this paper tested its content
+engine against rating and random baselines and found it ahead, putting 6.2 %
+of the films three users later enjoyed into its top 100. Those baselines were
+too weak.
 
-We test the engine the way it runs in the web app, on three public profiles
-with different tastes. In a temporal holdout (train on the diary up to a
-date, try to predict the films the user first watched and enjoyed
-afterwards), the engine puts **6.2 %** of those films in its top 100. Random
-order over the same pool would find **3.5 %**, sorting it by Letterboxd
-rating finds **2.7 %**, and the highest-rated films of the whole 30,541-film
-catalog find **1.8 %**. The engine leads on all three profiles, and each gap
-lies outside a fold-bootstrap interval. The refinements added on top of the
-core taxonomy model (IDF weighting, aversion penalty, favourite cluster,
-neighbour signal, diversity) do not move Recall@100 by a clear margin, alone
-or together, and two of them point slightly the wrong way. The bigger limit
-is retrieval: only 27 % of the films users later enjoyed ever reach the
-candidate pool.
+We added two stronger ones, both built from a sample of 500 public Letterboxd
+profiles: the most-watched films of that sample, and EASE, a
+collaborative-filtering model fitted on the films those users liked. Design
+choices were made on 100 held-out test users. The headline numbers come from
+83 **fresh** users sampled afterwards, whom neither the model nor any choice
+ever saw.
+
+**Collaborative filtering predicts what people go on to enjoy far better than
+the engine:** 26.3 % of later favourites in the top 100, against 9.5 % for the
+engine. Popularity alone already beats the engine (14.5 %).
+
+A second test asks a different question: among films a user *did* watch, does
+a score separate the ones they liked from the ones they did not? Here the
+Letterboxd average is the strongest single signal (AUC 0.74). EASE comes
+second (0.68). The engine is barely above a coin flip (0.59), because its
+taste profile tracks what a user watches often rather than what they love.
+
+**One gap only the engine fills: rare films.** About a third of later
+favourites were logged by fewer than 10 % of the sample. EASE finds 1 of 805;
+the engine finds 14.
+
+The product now answers two questions separately:
+
+- **"For you"** blends EASE with the Letterboxd average: 18.0 % Recall@100,
+  nearly twice the engine.
+- **"Your taste"** keeps the engine's profile and adds a personal quality
+  floor learned from the user's own ratings. The floor more than halves bad
+  picks (10.6 % → 4.4 %) and finds more later favourites than no floor or a
+  fixed one.
+
+Shown together, the two lanes contain 25.4 % of later favourites.
 
 ## Key findings
 
-1. **The engine beats rating and random baselines, 1.8–3.4×.** 27 of 437
-   later-enjoyed films land in the top 100, against an expected 15.3 for
-   random order over the same pool, 12 for that pool sorted by rating and 8
-   for the top-rated catalog.
-2. **Retrieval, not ranking, is the bottleneck.** Of the 437 films, 118
-   reached the pool. The ranker put 27 of those (22.9 %) into the top 100,
-   about 1.8 times what a random order of the pool would.
-3. **The refinements are not yet proven.** No ablation changes Recall@100
-   beyond noise, and the core taxonomy model alone (24 hits) is statistically
-   indistinguishable from the full engine. Turning the aversion penalty off
-   helps a little (30 vs 27), turning IDF off a little more (34 vs 27, on all
-   three profiles). Both stay documented as open questions, not settled wins.
-4. **Every score is auditable.** The final score of LEGACY's top
-   pick, *Rushmore*, follows from its published terms to the decimal (§7.3).
-   It also entered the pool only through Letterboxd's own similar-film lists.
+1. **Stronger baselines change the verdict.** Against rating and random order
+   the engine looks good. Popularity in a user sample beats it by 5.0 pp
+   [+2.8, +7.3], and collaborative filtering by 16.8 pp [+14.4, +19.2].
+2. **Behaviour and taste are different tests.** Recall rewards predicting
+   what someone watches next, which favours popular films. The taste test
+   removes popularity by only comparing films the user watched, but it
+   penalises genre matches, because users only venture outside their genres
+   for well-reviewed films. We report both.
+3. **The engine's profile measures habit, not love.** Its taste terms add
+   almost nothing beyond a film's Letterboxd average: AUC 0.52 among films of
+   similar rating, against 0.60 for EASE.
+4. **Only the engine reaches rare films.** 805 of 2,572 later favourites are
+   rare in the sample. EASE finds 1, the product's "For you" lane 3, the
+   engine 14. This is the case for keeping the content engine.
+5. **Two lanes, each measured on its own target.** "For you" is a deliberate
+   trade: slightly below the pure Letterboxd average on taste (0.731 vs
+   0.740), 3.7 times better at predicting what the user watches (18.0 % vs
+   4.9 %), and personal rather than the same top-250 list for everyone.
+   "Your taste" uses a per-user quality floor, ★3.0 for a tolerant profile
+   and ★3.6 for a strict one, and beats a fixed ★3.4 floor by 1.3 pp recall
+   [+0.5, +2.3].
+6. **Refinements do help, given enough users.** With 3 profiles v1 could not
+   show it. On the fresh users, removing the neighbour signal costs 1.7 pp
+   [−3.0, −0.5], and so does the core model alone. Removing IDF *gains*
+   1.2 pp [+0.5, +1.9].
 
 ## Contents
 
@@ -52,7 +78,7 @@ candidate pool.
 2. [System overview](#2-system-overview)
 3. [The taste profile](#3-the-taste-profile)
 4. [Candidate generation](#4-candidate-generation)
-5. [Scoring](#5-scoring)
+5. [Scoring and the two lanes](#5-scoring-and-the-two-lanes)
 6. [Reranking and modes](#6-reranking-and-modes)
 7. [Three case studies](#7-three-case-studies)
 8. [Evaluation](#8-evaluation)
@@ -70,14 +96,19 @@ fail in one of three ways:
   slapstick and someone who loves deadpan equally well. Broad labels flatten
   taste.
 - **Popularity drift.** When global rating dominates, the list turns into
-  "good films" rather than "films for this person". Our holdout agrees: the
-  two rating-ordered baselines are the weakest we measured.
-- **Opacity.** "People like you liked this" is a poor answer for a product
-  whose value is showing what it understood about you.
+  "good films" rather than "films for this person". Rating-ordered lists are
+  the weakest predictors we measured (§8.2).
+- **Opacity.** A bare "people like you liked this" says little about what
+  the system understood about you.
 
-Recomendarr's answer is to spend the effort on two separate problems. First,
-pick the right few hundred candidates from the user's strongest signals.
-Second, rank them with terms a person can read.
+Version 1 of Recomendarr answered with a content engine: pick a few hundred
+candidates from the user's strongest signals, then rank them with terms a
+person can read. That engine is still here. What changed is the evaluation
+around it. Measured against a collaborative model and against popularity in a
+user sample, it turned out to predict behaviour poorly and to add little taste
+signal beyond film quality, while being the only component that reaches rare
+films (§8). The product now keeps the engine for what it does well and adds a
+collaborative lane for what it does not.
 
 ## 2. System overview
 
@@ -96,11 +127,29 @@ flowchart LR
     A --> C
     T --> N[Letterboxd Similar lists of favourites]
     N --> C
+    D --> K[EASE: liked films → scores]
+    K --> C
     C --> E[Metadata enrichment and filters]
     E --> S[Scoring: personal fit, quality, mood]
     S --> R[MMR diversity rerank]
-    R --> O[Top 100 with score breakdowns]
+    R --> O[Flat top 100]
+    S --> L1[Lane 1 · For you]
+    S --> L2[Lane 2 · Your taste]
+    K --> L1
 ```
+
+A live run now returns **two lanes** next to the engine's flat list:
+
+| Lane | Question it answers | Score |
+| --- | --- | --- |
+| For you | What will you probably like? | 0.5 · EASE rank + 0.5 · Letterboxd-average rank |
+| Your taste | More of what you like to watch | 0.5 · engine taste match + 0.25 · EASE + 0.25 · personal quality curve, above a personal floor |
+
+The collaborative model (§4.4) is fitted offline once a month; a run only
+sums stored weights, so it adds well under a second. The flat list stays in
+the API for exports and saved runs; the interface shows the two lanes.
+
+![The two lanes in the app: For you, with the liked films behind each pick](./assets/screenshots/lanes.png)
 
 Every entry point runs the same core pipeline and differs only in where the
 diary and the candidates come from:
@@ -114,8 +163,9 @@ diary and the candidates come from:
 | Similar to a film ("anchor") | optional username | anchor's own taxonomy + Similar list |
 
 This paper describes the **live username flow with the app's default
-settings**, which is what users see, including the default year window of
-1985 to the current year.
+settings**, including the default year window of 1985 to the current year.
+The two lanes exist only in this flow; the other entry points return the
+flat list.
 
 ## 3. The taste profile
 
@@ -190,11 +240,21 @@ the profile reads:
 | Directors | Edgar Wright 10.8 · Makoto Shinkai 10.5 · Joel Coen 8.5 |
 | Favourite themes | Crude humor and satire 84.5 · Relationship comedy 28.1 · Humanity and the world around us 27.3 |
 
+### 3.5 What the profile measures
+
+The base weight of 1.0 means every logged film counts, and a rating only
+nudges it: a 3★ and a 3.5★ watch both count 1.0, a 4★ watch 1.5, and even a
+5★ liked rewatch only 3.5. The profile therefore mirrors what a user
+*watches often*. For LEGACY that is comedy, rated 3.2★ on average. §8.4
+shows the consequence: the profile is a good guide to "more of the same" and a
+poor guide to "what will you love". The second lane (§5.7) uses it for the
+former.
+
 ## 4. Candidate generation
 
 The ranker never sees the whole catalog. It sees a pool built from the
 profile, which is the most consequential design decision in the system, as
-§8.3 shows.
+§8.5 shows.
 
 ### 4.1 Source pages
 
@@ -210,9 +270,9 @@ it, which later feeds the multi-source bonus and the explanations.
 Letterboxd publishes a "Similar films" list per film. For the top 12 seed films
 the engine reads up to 100 entries of that list and counts, for every
 candidate, how many seeds list it. Films already in the pool get that count;
-films not yet in the pool are added. This is the system's only collaborative
-signal, and it is deliberately narrow: it is Letterboxd's item similarity
-around films the user loved, not a user-user model.
+films not yet in the pool are added. It is Letterboxd's own item similarity
+around films the user loved; the user-based collaborative model of §4.4 was
+added later.
 
 For LEGACY the neighbour step added 330 films to the pool and boosted
 29 that were already there.
@@ -238,10 +298,50 @@ Trailers, bonus material and similar listings are not dropped but take a
 | NOIR | 20 | 808 | 296 | 571 |
 | MIXTAPE | 20 | 1,325 | 545 | 1,029 |
 
-## 5. Scoring
+### 4.4 Collaborative candidates (EASE)
+
+The engine's candidates all come from the user's own labels. The second
+source asks other people instead: which films did viewers who liked the same
+films also like? We use **EASE** (Embarrassingly Shallow Autoencoders,
+Steck 2019), a linear item-item model with a closed-form solution and a
+single hyperparameter. It is among the strongest published baselines for
+top-N recommendation from implicit feedback, and simple enough to fit on a
+laptop.
+
+- **Data.** 500 public Letterboxd profiles, sampled from film member pages
+  (§8.1). For each, the Films page gives every logged film with its rating
+  and like. A film counts as *liked* at ≥ 3.5★, or when liked without a
+  rating. Films liked by fewer than five sampled users are dropped, which
+  leaves about 7,600 films.
+- **Model.** With `X` the users × films matrix of likes, EASE solves for an
+  item-item weight matrix with a zero diagonal:
+
+  ```text
+  P = (XᵀX + λI)⁻¹            B = I − P · diag(1 / diag(P))            λ = 1000
+  score(user, film) = Σ over the user's liked films j of B[j, film]
+  ```
+
+  With far fewer users than films, `P` comes from the Woodbury identity,
+  which inverts a users × users matrix instead. The result is the same to
+  within 10⁻⁸, and the fit needs 0.4 GB instead of 2.2 GB.
+- **Liked, not watched.** Fitting on every logged film is the more common
+  choice. On held-out users it is worse on both of our tests: Recall@100
+  19.4 % vs 24.8 % on the test users the choice was made on, and 19.3 % vs
+  26.3 % with taste AUC 0.61 vs 0.68 on the fresh ones.
+- **Storage.** Each film keeps its 300 largest weights by magnitude,
+  including negative ones. Keeping only positive weights cost a point of
+  recall; the top 300 by magnitude match the full matrix within 0.2 pp.
+  A run sums stored weights in plain Python.
+
+In a run, EASE's 300 best-scoring unseen films join the pool before
+enrichment, so they pass the same filters as every other candidate. The
+engine's flat list ignores them; the lanes use them.
+
+## 5. Scoring and the two lanes
 
 Each surviving film gets three scores on a 0–100 scale: **personal fit**,
-**quality** and **mood**. A blend of the three gives the final score.
+**quality** and **mood**. A blend of the three gives the engine's final
+score (§5.1–5.5). The two lanes (§5.7) rank the same films differently.
 
 ### 5.1 Personal fit
 
@@ -333,6 +433,53 @@ and the interface turns both into plain language: why the film is there,
 how the score adds up, and which of the user's tastes it touches.
 
 ![Why this pick: the explanation and score for Rushmore](./assets/screenshots/why-this-pick.png)
+
+### 5.7 The two lanes
+
+Both lanes rank the same enriched, filtered pool. Scores are rank
+percentiles within the pool, so the parts are on a common 0–1 scale.
+
+**Lane 1, "For you"**, covers films EASE can score:
+
+```text
+for_you = 0.5 · pct(EASE score) + 0.5 · pct(Letterboxd average)
+```
+
+EASE alone predicts behaviour best but pulls towards popular films; the
+Letterboxd average is the best single predictor of whether a watched film is
+liked (§8.3). The weight 0.5 is the smallest quality share at which the taste
+AUC comes within about 0.01 of the average alone, while recall stays far
+above it. On the 100 test users used for design choices that is 0.5. On the
+83 fresh users the gap at 0.5 is 0.009, so the rule gives 0.5 again (on one
+half of the first 100 it would have given 0.65: the balance point moves a
+little with the sample). Each pick is explained by the three liked films that
+contribute most to its EASE score ("Because you liked …").
+
+**Lane 2, "Your taste"**, covers only films the engine's own sources found,
+and leaves out films already in lane 1:
+
+```text
+your_taste = 0.5 · pct(engine taste terms) + 0.25 · pct(EASE) + 0.25 · pct(like(q))
+```
+
+The taste terms are the engine's §5.1 terms before normalisation; EASE only
+breaks ties between equally good matches. `like(q)` is the user's
+**personal quality curve**: for each Letterboxd-average bin (below 3.0, then
+0.2 steps up to 4.0 and above), the share of the user's own first watches
+they rated ≥ 3★, smoothed towards their overall rate with ten pseudo-films.
+The **personal floor** is the lowest bin edge from which every higher bin
+stays under 30 % bad picks (≤ 2.5★). It is ★3.0 for LEGACY, ★3.2 for
+MIXTAPE and ★3.6 for NOIR, three profiles with very different tolerance for
+weaker films (§8.6). Films below the floor are dropped from the lane.
+
+Both lanes then go through the diversity rerank of §6.1 and keep 50 films.
+Leaving lane-1 films out of lane 2 lowers lane 2's own recall, but both lanes
+together find more later favourites than two overlapping lists (§8.6). In a
+mood mode both lanes keep only films with a positive mood match. Re-cuts of
+watched films (an edition marker such as "extended" or "The Whole Bloody
+Affair" plus the same base title and director) are dropped. If the model is
+missing or the user has fewer than ten liked films it knows, lane 1 is empty
+and says why; lane 2 then gives the EASE quarter to the taste match.
 
 ## 6. Reranking and modes
 
@@ -427,7 +574,9 @@ familiar names.
    and Drama (genre 14.0 after IDF). It shares enough favourite signals to hit the
    cluster cap of 18. Two seeds give neighbour 6.0. The aversion penalty costs
    −5.0: the maximum 3.0 for themes plus mini-themes and genres the user also
-   often rates low (§8.4).
+   often rates low. LEGACY's strongest aversion theme is also their
+   strongest positive one, because the thresholds are absolute; relative
+   aversion is open work (§10).
 
    ```text
    personal_total = 30 + 20 + 14.0 + 18 + 6 − 5 = 83.0
@@ -445,110 +594,276 @@ familiar names.
 
 ![Rushmore's score terms against their caps](./assets/generated/figure-6-rushmore.svg)
 
+### 7.4 The two lanes for LEGACY
+
+The same profile, run through the lanes (EASE fitted without the held-out
+test users):
+
+| # | For you | Because you liked … | Your taste | Matches |
+| ---: | --- | --- | --- | --- |
+| 1 | The Lord of the Rings: The Return of the King (★4.55) | Harry Potter and the Philosopher's Stone, The Prestige | When Harry Met Sally… (★4.07) | Relationship comedy |
+| 2 | The Godfather (★4.52) | 12 Angry Men, Pulp Fiction | The Lego Batman Movie (★3.97) | Crude humor and satire, Epic heroes |
+| 3 | Schindler's List (★4.54) | The Shawshank Redemption, Good Will Hunting | No Other Choice (★4.09) | Humanity and the world around us |
+| 4 | Interstellar (★4.45) | Inglourious Basterds, Project Hail Mary | A Serious Man (★3.86) | Crude humor and satire, Faith and religion |
+| 5 | Se7en (★4.37) | Good Will Hunting, Pulp Fiction | The Fabelmans (★4.00) | Moving relationship stories |
+| 6 | Spirited Away (★4.44) | Everything Everywhere All at Once, Your Name. | The Blues Brothers (★4.01) | Crude humor and satire, Song and dance |
+| 7 | Django Unchained (★4.33) | Inglourious Basterds, Kill Bill: Vol. 1 | Hunt for the Wilderpeople (★4.08) | Moving relationship stories |
+| 8 | There Will Be Blood (★4.46) | No Country for Old Men, The Big Lebowski | 22 Jump Street (★3.37) | Underdogs and coming of age |
+
+The lanes answer their two questions visibly. "For you" is the canon a
+viewer with LEGACY's favourites has not yet seen: the model's evidence is
+that such viewers love these films, and LEGACY's own ratings of the 4★+
+bin (0 bad picks in the diary) agree. "Your taste" is the comedy-heavy
+profile of §3.4, now above the personal floor of ★3.0. *22 Jump Street*
+(★3.37) stays in: at that average LEGACY still enjoys 82 % of films, so a
+fixed ★3.4 floor would have been too strict for this user. *Rushmore* is at
+rank 9.
+
 ## 8. Evaluation
 
 ### 8.1 Method
 
-A temporal holdout asks the question that matters: given what the user had
-watched up to a date, would the engine have suggested the films they went on
-to enjoy?
+Two questions, two tests:
 
-- Each dated diary is cut into **five consecutive test windows**, each 10 %
-  of the diary (together the most recent half). Each fold trains on all
-  entries before its window.
-- **Positives** are first watches inside the window: not marked as a rewatch,
-  not in the training diary, and rated at least 3.5★ (or liked, if unrated).
-- At the cutoff, everything logged after it counts as unseen. Films on the
-  Films page without a diary date stay excluded, since we cannot date them.
-- The engine runs the full app pipeline on the training history (profile,
-  20 pages, neighbours, enrichment, the app's config) and returns its top 100.
-- **Variants** rank the same pool, so they differ only in ranking. The two
-  exceptions remove the neighbour step completely, including the films only
-  neighbours brought in: *without neighbours*, and *core model only*, which
-  also switches off IDF, aversion, the favourite cluster and MMR.
-- **Baselines**: the same pool sorted by Letterboxd rating; the exact
-  expected result of a random order of that pool; and the 100 highest-rated
-  feature films of the whole cached catalog (1985–2026, at least 40 minutes).
-- We report Recall@K micro-averaged over the 15 folds, and 95 % intervals
-  from 10,000 bootstrap resamples of folds.
+- **Behaviour (temporal holdout, Recall@K).** Given what a user had watched
+  up to a date, would the system have suggested the films they went on to
+  enjoy? Each dated diary is cut into consecutive test windows of 10 % of
+  the diary; each fold trains on everything before its window. **Positives**
+  are first watches in the window (no rewatch, not in the training diary)
+  rated ≥ 3.5★, or liked if unrated. Lane 2, which serves "films I enjoy
+  watching", is also scored with ≥ 3★ positives. We report the share of
+  positives in the top 100 (Recall@100).
+- **Taste (AUC among watched films).** Take every rated first watch in the
+  window. Each score ranks these films using only the training history. AUC
+  is the probability that a film the user liked (≥ 3.5★) outranks one they
+  did not: 0.5 is a coin flip. Because every film was watched, popularity and
+  exposure drop out.
 
-### 8.2 Results
+**The collaborative sample.** 500 public profiles were drawn from Letterboxd
+film member pages: 233 via random popular films and 267 via films from the
+case profiles' diaries (12 further profiles had under 50 films and were
+skipped). The median profile logs 852 films; about a tenth reach the scrape
+cap of 3,024. After the test users are removed, the model trains on 395 of
+them; 6 users drawn via a film a case profile logged inside a test window are
+dropped too, so seeding cannot leak test positives.
 
-![Recall@100 for the engine, ablations and baselines](./assets/generated/figure-1-recall.svg)
+**Three groups of profiles:**
 
-![Difference to the engine with 95 % intervals](./assets/generated/figure-2-differences.svg)
+| Group | Users | Folds each | Role |
+| --- | ---: | ---: | --- |
+| Case profiles (LEGACY, NOIR, MIXTAPE) | 3 | 5 | continuity with v1: the engine again finds 27 of 437 |
+| First test users | 100 | 2 | held out of the model; **all design choices were made on them** |
+| **Fresh test users** | **83** | **2** | **sampled after every choice was fixed; the headline numbers** |
 
-Per profile, the engine finds 12 / 125 (LEGACY), 11 / 168 (NOIR)
-and 4 / 144 (MIXTAPE), against an expected 5.3, 6.7 and 3.3 for random
-order and 6, 3 and 3 for rating order. It leads on every profile, though only
-narrowly on MIXTAPE.
+Both test groups are sampled users with an active, rated diary. For the
+first group 200 profiles were checked (100 kept; 39 had no diary, 35 a
+sparse one, 26 a mostly unrated one). For the fresh group, 300 new profiles
+were sampled the same way (half via random popular films, half via films the
+case profiles liked early in their diaries); 163 were checked and 83 kept
+(34 / 23 / 23). The other new profiles were discarded again, so the model the
+fresh users are scored against is identical to the one used for the choices.
+Median test diary: 391 dated entries (first), 286 (fresh).
 
-### 8.3 Retrieval is the bottleneck
+Intervals are 95 % bootstrap intervals from resampling **users** (5,000
+rounds), which treats a user's folds as dependent. All runs use the app's
+default configuration and are tied to a commit (`evaluation-v2.json`).
 
-![Where holdout films are lost](./assets/generated/figure-3-funnel.svg)
+### 8.2 Baselines matter
 
-Only 118 of the 437 positives (27 %) were in the ranked pool of their fold
-(34 % for LEGACY, 24 % for NOIR and MIXTAPE). No ranking
-change can recover the other 73 %. Among reachable films the ranker does its
-job: 27 of 118 (22.9 %) make the top 100, against 15.3 expected from a
-random order of the same pools, about 1.8 times chance.
+![Recall@100 for the engine, baselines, EASE and the lanes](./assets/generated/figure-7-baselines.svg)
 
-### 8.4 What the ablations say
+![Difference to the engine on the fresh users](./assets/generated/figure-8-deltas.svg)
 
-- **The core model carries the result.** Taxonomy terms, people, source
-  overlap and quality, with every refinement off, find 24 films: still above
-  every baseline and within noise of the full engine.
-- **Aversion penalises the wrong things.** Its thresholds are absolute (a
-  theme needs an aversion weight of 3.0), so a user who watches a lot in one
-  lane trips them in that very lane. LEGACY's strongest aversion theme
-  is Crude humor and satire (22.8), which is also their strongest positive
-  theme (412.9). 88 of LEGACY's top 100 and all 100 for the other two
-  profiles carry a penalty. Removing it gains 2 hits for LEGACY, 1 for
-  MIXTAPE and none for NOIR. The fix is to judge aversion relative
-  to positive weight (§10).
-- **IDF may push too far towards niche films.** It only ever boosts rare
-  overlaps, but users mostly watch well-known films. Removing it helped all
-  three profiles a little (+2, +4, +1). We keep it for now because it makes
-  explanations more specific, but the evidence does not favour it.
-- **No measurable neighbour effect.** Removing the neighbour step entirely,
-  pool contribution included, changes the top 50 (20 → 16) but not the top
-  100. Individual wins exist (our case-study #1 only reached the pool through
-  neighbours), but at this sample size they do not add up to a measurable
-  gain.
-- **MMR costs nothing measurable.** Recall stays the same while the director
-  Herfindahl index falls by 23–45 %. For LEGACY that is 64 → 86
-  effective directors in the top 100.
+On the 83 fresh users (2,572 positives):
 
-### 8.5 Threats to validity
+| Method | Recall@100 | vs engine [95 %] |
+| --- | ---: | --- |
+| Engine | 9.5 % | |
+| Same pool, random order | 3.5 % | −6.1 [−7.6, −4.7] |
+| Same pool, by Letterboxd rating | 4.9 % | −4.7 [−6.1, −3.4] |
+| Top-rated catalog | 1.4 % | −8.1 [−9.8, −6.7] |
+| **Most watched in the sample** | **14.5 %** | **+5.0 [+2.8, +7.3]** |
+| EASE, every logged film | 19.3 % | +9.8 [+7.3, +12.4] |
+| **EASE, liked films** | **26.3 %** | **+16.8 [+14.4, +19.2]** |
 
-- **Small, clustered sample.** Three profiles and 437 positives. The folds
-  are not independent (three users, nested training sets), so the bootstrap
-  intervals are optimistic, and eight comparisons are made without
-  correction. Treat the baseline gaps as consistent evidence, not as a
-  precise effect size, and differences under about two points as noise.
-- **Tuning profile.** LEGACY is the developer's own profile and was
-  used to tune the refinements in May 2026. It supplies 12 of the 27 hits.
-  The other two profiles were not used for tuning.
-- **Recall undercounts quality.** A good recommendation the user has not
-  watched yet counts as a miss. Holdout recall measures prediction of
-  behaviour, not satisfaction.
-- **Present-day data.** Letterboxd ratings, browse pages and Similar lists
-  were read in September 2026, after all test windows. They are aggregate
-  signals, but a small leak through the users' own ratings in those averages
-  cannot be ruled out.
-- **Catalog baseline bias.** The cached catalog over-represents films that
-  earlier runs touched, which favours that baseline, not the engine.
+The v1 baselines still trail the engine. The two stronger ones do not.
+*Most watched* is the same 100 popular films for everyone, minus what the
+user has seen, and it already beats the engine. The first 100 test users and
+the case profiles show the same order (engine 10.2 % and 6.2 %, most watched
+12.2 % and 14.0 %, EASE 24.8 % and 33.2 %). A rating-sorted list looks
+personal and is not: rating is a property of the film, while what someone
+watches next depends on who they are and on what is popular.
+
+### 8.3 Behaviour versus taste
+
+![AUC of each score on films the users watched](./assets/generated/figure-10-taste.svg)
+
+On the 3,424 rated first watches of the fresh users (2,105 liked):
+
+| Score | Taste AUC |
+| --- | ---: |
+| Engine | 0.586 |
+| Engine taste terms only | 0.536 |
+| EASE, every logged film | 0.606 |
+| Popularity in the sample | 0.609 |
+| EASE, liked films | 0.679 |
+| Lane 1, 0.5 EASE + 0.5 Letterboxd average | 0.731 |
+| **Letterboxd average alone** | **0.740** |
+
+The ranking of methods flips between the tests. Popularity and EASE
+dominate recall; the plain Letterboxd average dominates taste. Both tests
+are biased, in opposite directions:
+
+- **Recall** rewards predicting behaviour. Popular films are watched by
+  nearly everyone eventually, so a method that ranks them high collects
+  hits whether or not it understood the user.
+- **The taste test** only sees films the user chose to watch, and that choice
+  is not random. Inside their usual genres people watch casually and rate
+  middling; outside them they mostly watch what was recommended to them or
+  well reviewed, and rate it well. Matching the user's genres is therefore
+  penalised by construction.
+
+Neither test measures discovery: a great film the user would never have
+found counts as a miss in the first and is absent from the second.
+
+### 8.4 Why the engine misses taste
+
+Split into its parts, the engine's score is carried by the quality term
+(≈ the Letterboxd average). Its taste terms reach 0.536 on their own, and
+**0.522 among films of similar Letterboxd rating** (within-tercile AUC),
+against 0.603 for EASE. Neither beats the Letterboxd average on this test;
+EASE at least carries a personal signal beyond it.
+
+The cause is the profile (§3.5): it weights what a user logs often, not what
+they rate highly. In a pilot on the case profiles, building it from liked
+films only raised the engine's AUC from 0.55 to 0.60 and did not hurt
+recall; the taste terms remained weak. The profile is useful for "more of the
+same", which is what lane 2 uses it for, and a poor predictor of love.
+
+### 8.5 Rare films and retrieval
+
+![Later favourites found, split by how many sample users logged the film](./assets/generated/figure-9-tiers.svg)
+
+Split by how many of the 395 training users logged a film (fresh users):
+
+| Later favourite is … | Positives | Engine | EASE (liked) | Lane 1 | Most watched |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Popular (≥ 30 %) | 841 | 155 | 534 | 355 | 373 |
+| Mid (10–30 %) | 926 | 76 | 141 | 105 | 0 |
+| Rare (< 10 %) | 805 | **14** | **1** | 3 | 0 |
+
+About a third of later favourites are rare, and collaborative filtering
+cannot reach them: a film few sample users logged has almost no weights. The
+engine, which reads Letterboxd's labels rather than people, finds 14 of them.
+That is little in absolute terms and still the best number in the row, in
+both test groups (27 against 0 of 1,294 rare favourites for the first 100
+test users). It is the measured case
+for keeping the content engine next to EASE.
+
+Retrieval remains the other limit. 30 % of the fresh users' positives ever
+reach the engine's pool; adding EASE's top 300 raises that to 55 % (65 % for
+the case profiles).
+
+![Where holdout films are lost (v1, case profiles)](./assets/generated/figure-3-funnel.svg)
+
+### 8.6 The lanes
+
+**Lane 1, "For you"** reaches 18.0 % Recall@100 (4.6 % at 10), +8.5 pp
+[+6.8, +10.3] over the engine, at a taste AUC of 0.731 against 0.740 for the
+Letterboxd average alone. The product code matches the prototype it was
+designed from (18.0 % on the same users). Its top 100 leans popular: the
+median film was logged by 38 % of the sample, against 18 % for the engine.
+
+**Lane 2, "Your taste"**, positives ≥ 3★ (3,381):
+
+![Recall and bad picks for the lane-2 floor variants](./assets/generated/figure-12-lane2-floors.svg)
+
+| Variant | Recall@100 | Bad picks (≤ 2.5★ when watched) |
+| --- | ---: | ---: |
+| No quality floor | 9.0 % | 36 of 340, 10.6 % |
+| Fixed floor ★3.4 | 9.6 % | 18 of 340, 5.3 % |
+| Personal floor | 9.1 % | 24 of 332, 7.2 % |
+| Personal curve, soft | 10.9 % | 24 of 391, 6.1 % |
+| **Personal curve + floor (chosen)** | **10.9 %** | **17 of 384, 4.4 %** |
+
+The chosen variant was fixed on the first 100 test users. There its edge over
+a fixed ★3.4 floor was not significant. On the fresh users it is: +1.3 pp
+recall [+0.5, +2.3], with the fewest bad picks of all variants, and against
+no floor +1.8 pp recall [+0.9, +2.8] at −6.2 pp bad picks [−8.8, −3.7]. The
+personal floor also fits users as they are. It is ★3.0 for LEGACY, ★3.2 for
+MIXTAPE and ★3.6 for NOIR:
+
+![Personal quality curves of a tolerant and a strict profile](./assets/generated/figure-11-quality-curve.svg)
+
+In the product, lane 2 leaves out lane-1 films. Its own recall then falls to
+6.5 %, because its easiest hits are the popular films lane 1 already shows.
+What matters is the combination: in a diagnostic run on 40 test users, both
+lanes together held 27.9 % of later favourites with the exclusion and 26.6 %
+without it, since the two lists then show 200 different films. On the fresh
+users the two lanes together hold **25.4 %** (21.4 % of ≥ 3★ positives),
+against 9.5 % for the engine's single list. Diversity (MMR) cost nothing
+measurable in either lane and raised lane 1's Recall@10 from 4.1 % to 5.7 %
+in the diagnostic run.
+
+### 8.7 Ablations revisited
+
+With three profiles v1 found no refinement that moved recall beyond noise.
+On the 83 fresh users, against the full engine:
+
+| Variant | Recall@100 | Difference [95 %] |
+| --- | ---: | --- |
+| Engine | 9.5 % | |
+| Without neighbour signal | 7.8 % | −1.7 [−3.0, −0.5] |
+| Core model only | 7.8 % | −1.7 [−3.0, −0.5] |
+| Without IDF | 10.7 % | **+1.2 [+0.5, +1.9]** |
+| Without diversity rerank | 9.6 % | +0.0 [−0.9, +0.9] |
+| Without aversion penalty | 9.4 % | −0.1 [−0.4, +0.2] |
+| Without favourite cluster | 9.2 % | −0.3 [−0.8, +0.3] |
+
+The first 100 test users agree on the three clear rows (engine 10.2 %,
+without neighbours 8.4 %, core model 8.2 %, without IDF 11.2 %). The neighbour signal
+and the refinements as a whole measurably help. IDF measurably hurts: it only
+boosts rare overlaps, while most later favourites are well-known films. v1
+listed this as an open question; it is now the clearest single fix for the
+engine (§10).
+
+### 8.8 Threats to validity
+
+- **Sample.** Member pages over-represent heavy loggers (median 852 films),
+  and half the sampled profiles were reached via the case profiles' films.
+  This helps the case profiles; the test users were drawn from both strata
+  and never trained on.
+- **Test users** are those with an active, rated diary (100 of 200 and 83 of
+  163 checked), more engaged than a typical member.
+- **Choices and headline data are separate**: every weight and floor was
+  fixed on the first 100 test users; the fresh 83 were sampled afterwards.
+  They were sampled from the same population by the same method, so they
+  test generalisation to new users, not to other kinds of users.
+- **Present-day data.** Sample libraries, Letterboxd averages and Similar
+  lists were read in September 2026, after all test windows. In a pilot,
+  9 of 89 EASE hits were films released after the fold's cutoff year: small,
+  not zero.
+- **Recall and AUC** carry opposite biases (§8.3) and neither measures
+  discovery value. A user study would.
+- **Growing catalog.** The cached catalog grew from 30,541 to 45,929 films
+  while preparing the sample. The top-rated-catalog baseline for the case
+  profiles fell from 8 to 4 hits as a result; no other number depends on
+  catalog size.
 
 ## 9. Engineering
 
 | Area | What it does |
 | --- | --- |
 | Stack | Python backend, Next.js frontend, SQLite, Docker |
-| Catalog | 30,541 films and 5,899 Letterboxd Similar lists cached locally |
-| Letterboxd access | reads public pages only, gently: one shared rate limit for all requests and aggressive caching; a page that fails is skipped instead of aborting the run |
+| Catalog | about 51,000 films cached locally with their Letterboxd metadata |
+| Collaborative model | EASE fitted monthly by a background job: refresh known sample users (about one page each), add new ones, refit (0.4 GB, seconds), activate only if the owner's own taste AUC does not drop; one row of 300 neighbour weights per film |
+| Letterboxd access | public pages only, no login; one shared rate limit for all requests (1 request per second for the sample) and aggressive caching; a page that fails is skipped instead of aborting the run |
+| Sample data | for each sampled member only film, rating and like; stored locally, used for this research and a private instance of the app; no usernames are published |
 | Caches | diaries, watched lists, browse pages, Similar lists and finished runs are cached with separate lifetimes, so a repeat run takes seconds |
 | Saved runs | every run is kept and can be exported as HTML, JSON, CSV or a Letterboxd import list |
-| Tests | 438 automated backend tests |
+| Tests | 486 automated backend tests and 21 frontend tests |
+
+A live run with both lanes takes about two seconds on a warm cache.
 
 Beyond personal recommendations, Recomendarr also offers a Year in Review,
 all-time stats, similar-film recommendations ("more like this film"), film
@@ -560,18 +875,23 @@ pages and explorable theme, genre, mini-theme and director catalogs.
 
 In order of expected impact:
 
-1. **Widen retrieval.** 73 % of later-enjoyed films never reach the pool.
-   Candidates: more neighbour seeds and deeper Similar lists, pages for the
-   favourite cluster rather than only the aggregate top lists, and recency-
-   and popularity-sorted pages next to rating-sorted ones.
-2. **Relative aversion.** Penalise a theme only when its aversion weight is a
-   meaningful share of its positive weight, then re-run the holdout.
-3. **Revisit IDF and saturation.** Test a lower IDF ceiling, and a divisor
-   or curve that does not tie many top films at personal fit 100.
-4. **More profiles and metrics.** Ten or more profiles, a second positive
-   threshold (4★+), and a user-facing "would you watch this?" study.
-5. **Mood and anchor evaluation.** This paper evaluates only the default
-   mode.
+1. **Larger and different test users.** The 83 fresh users come from the
+   same population as the first 100. Users with sparse or unrated diaries,
+   and a larger fresh set, would show how far the result carries.
+2. **Drop or cap IDF.** Removing it gains 1.7 pp recall [+0.7, +2.7] (§8.7).
+3. **Weight the profile by love for retrieval.** The profile tracks habit
+   (§3.5). Lane 2 wants that, but the engine's candidate pages might find
+   more later favourites from a liked-films profile.
+4. **Rare films.** They are two in five later favourites, and only the
+   engine reaches any. Widening the engine's retrieval for rare labels, or
+   a collaborative model with side information (themes as extra features),
+   are the two directions.
+5. **Similar to a film.** Pure co-watching gives weak "more like this"
+   lists; EASE neighbours filtered by content similarity are the obvious
+   next step for the anchor mode.
+6. **A user study.** Neither test measures discovery; asking users which
+   picks they would watch, and why, would.
+7. **Relative aversion** and **mood evaluation** remain open from v1.
 
 ## Appendix A: formula sheet
 
@@ -597,6 +917,17 @@ personal       min(100, Σ terms / 80 · 100)
 quality        clamp(20·rating, 0, 100)
 final          0.65·personal + 0.30·quality + 0.05·mood          (Personal mode)
 MMR            λ·score/max − (1−λ)·max_sim, λ = 0.75, every 5th slot off-genre if one genre ≥ 70 %
+
+liked          rating ≥ 3.5★, or liked when unrated
+EASE           P = (XᵀX + λI)⁻¹, B = I − P·diag(1/diag(P)), λ = 1000   (X: users × films, liked = 1)
+               via Woodbury when users < films; keep top 300 |B[j,·]| per film
+ease(film)     Σ over liked films j of B[j, film]
+pct(x)         rank percentile of x among the run's candidates, in (0, 1]
+for you        0.5·pct(ease) + 0.5·pct(Letterboxd average)          (films EASE can score)
+like(q)        per Letterboxd-average bin: (#rated ≥ 3★ + 10·overall rate) / (#rated + 10)
+floor          lowest bin edge from which every higher bin has < 30 % rated ≤ 2.5★
+your taste     0.5·pct(taste terms) + 0.25·pct(ease) + 0.25·pct(like(q)),   average ≥ floor
+lanes          MMR as above, 50 films each; lane 2 leaves out lane-1 films
 ```
 
 ## Appendix B: glossary
@@ -612,5 +943,13 @@ MMR            λ·score/max − (1−λ)·max_sim, λ = 0.75, every 5th slot of
 | IDF | Inverse document frequency: how rare a label is in the current pool |
 | MMR | Maximal marginal relevance: a greedy rerank trading relevance against similarity to what is already picked |
 | Recall@K | Share of held-out positives found in the top K |
-| Positive | In the holdout: a first watch after the cutoff rated 3.5★ or higher (or liked, if unrated) |
+| AUC | In the taste test: probability that a liked film outranks a not-liked one; 0.5 is chance |
+| EASE | Embarrassingly Shallow Autoencoders: a linear item-item collaborative model with a closed-form fit |
+| Lane | One of the two result lists: "For you" (EASE + Letterboxd average) or "Your taste" (engine profile + quality curve) |
+| Personal quality curve | How often a user enjoys films at each Letterboxd average, learned from their own ratings |
+| Sample | The 500 public profiles behind the collaborative model |
+| Test user | A sampled user with an active, rated diary, held out of the model and used for evaluation |
+| First / fresh test users | The 100 test users all design choices were made on, and the 83 sampled afterwards that give the headline numbers |
+| Popularity share | Share of the sample's training users who logged a film |
+| Positive | In the holdout: a first watch after the cutoff rated 3.5★ or higher (or liked, if unrated); 3★ for lane 2 |
 | Herfindahl index | Sum of squared shares; here, how concentrated the list is on a few directors |

@@ -306,6 +306,7 @@ a.chip { transition-property: border-color, color; transition-duration: .15s; }
 @media (min-width: 560px) { .films.wall { grid-template-columns: repeat(4, 1fr); } }
 @media (min-width: 880px) { .films.wall { grid-template-columns: repeat(6, 1fr); gap: 20px 14px; } }
 .wall .film { display: grid; grid-template-columns: 1fr; padding: 0; border: 0; }
+.wall .film[hidden] { display: none; } /* filters and lanes hide films in the wall too */
 .wall .rank {
   grid-area: 1 / 1; justify-self: start; margin: 4px; padding: 1px 6px;
   background: rgba(18, 22, 26, .88); color: var(--text-light); font-size: 11px;

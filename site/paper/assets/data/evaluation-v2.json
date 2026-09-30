@@ -1,0 +1,3248 @@
+{
+  "source": {
+    "scope": "Development and case controls; legacy split labels are retained",
+    "holdout_run": {
+      "commit": "6d37676a8428066baef780c524e909d27ef926a2",
+      "dirty": false,
+      "run_at": "2026-09-30T11:16:20.705260+00:00",
+      "parameters": {
+        "folds": 5,
+        "fold_fraction": 0.1,
+        "sample_test_users": 100,
+        "sample_folds": 2,
+        "sample_batch": "v1",
+        "ease_lambda": 2000.0,
+        "ease_min_users": 5,
+        "ease_max_films": 15000,
+        "ease_candidates": 300,
+        "profile_weighting": "current",
+        "offline": true,
+        "min_year": 1985,
+        "max_year": 2026
+      }
+    },
+    "taste_run": {
+      "commit": "6d37676a8428066baef780c524e909d27ef926a2",
+      "dirty": false,
+      "run_at": "2026-09-30T11:27:36.861738+00:00",
+      "parameters": {
+        "folds": 5,
+        "fold_fraction": 0.1,
+        "sample_test_users": 100,
+        "sample_folds": 2,
+        "sample_batch": "v1",
+        "ease_lambda": 2000.0,
+        "ease_min_users": 5,
+        "ease_max_films": 15000,
+        "ease_candidates": null,
+        "profile_weighting": "current",
+        "offline": true,
+        "min_year": 1985,
+        "max_year": 2026
+      }
+    },
+    "ease_model": {
+      "users": 1510,
+      "films": 15000,
+      "watched_films": 15000,
+      "max_films": 15000,
+      "lambda": 2000.0,
+      "min_users": 5,
+      "candidates_merged": 300,
+      "leaky_users_dropped": 392,
+      "blend_weights": [
+        0.1,
+        0.2,
+        0.3,
+        0.5
+      ],
+      "niche_max_share": 0.05,
+      "quality_weights": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    }
+  },
+  "sample": {
+    "users_checked": 2780,
+    "users_ok": 2083,
+    "rejected": {
+      "too_few": 133,
+      "low_signal": 564
+    },
+    "strata": {
+      "profile": 1094,
+      "random": 651,
+      "new": 338
+    },
+    "films_per_user": {
+      "p10": 122.0,
+      "median": 693,
+      "p90": 3024.0,
+      "mean": 1093.1
+    },
+    "ratings": 2277024,
+    "distinct_films": 134728,
+    "films_with_5_watchers": 35197,
+    "model_films": 15000,
+    "max_model_films": 15000,
+    "test_users": {
+      "kept": 100,
+      "checked": 200,
+      "by_reason": {
+        "no_diary": 39,
+        "ok": 100,
+        "sparse": 35,
+        "unrated": 26
+      }
+    },
+    "training_users": 1900,
+    "test_user_diary_entries": {
+      "p10": 92.2,
+      "median": 391.0,
+      "p90": 600.0,
+      "mean": 378.7
+    },
+    "catalog_films": 51539,
+    "model_films_in_catalog": 14478
+  },
+  "recall": {
+    "case_profiles": {
+      "profiles_folds": 15,
+      "positives": 444,
+      "positives_3star": 731,
+      "pool_share": 0.2703,
+      "pool_share_with_ease": 0.6554,
+      "methods": {
+        "app": {
+          "recall@10": 0.018018018018018018,
+          "recall@25": 0.02927927927927928,
+          "recall@100": 0.07207207207207207,
+          "hits@100": 32,
+          "tiers": {
+            "popular": {
+              "hits": 17,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 14,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 1,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.207
+        },
+        "no_neighbors": {
+          "recall@10": 0.018018018018018018,
+          "recall@25": 0.02252252252252252,
+          "recall@100": 0.06756756756756757,
+          "hits@100": 30,
+          "tiers": {
+            "popular": {
+              "hits": 16,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 14,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.18
+        },
+        "core_only": {
+          "recall@10": 0.013513513513513514,
+          "recall@25": 0.02252252252252252,
+          "recall@100": 0.05630630630630631,
+          "hits@100": 25,
+          "tiers": {
+            "popular": {
+              "hits": 14,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 11,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.167
+        },
+        "no_mmr": {
+          "recall@10": 0.02252252252252252,
+          "recall@25": 0.02702702702702703,
+          "recall@100": 0.06306306306306306,
+          "hits@100": 28,
+          "tiers": {
+            "popular": {
+              "hits": 14,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 13,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 1,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.204
+        },
+        "no_aversion": {
+          "recall@10": 0.018018018018018018,
+          "recall@25": 0.02927927927927928,
+          "recall@100": 0.07432432432432433,
+          "hits@100": 33,
+          "tiers": {
+            "popular": {
+              "hits": 17,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 15,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 1,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.208
+        },
+        "no_idf": {
+          "recall@10": 0.02027027027027027,
+          "recall@25": 0.03153153153153153,
+          "recall@100": 0.08333333333333333,
+          "hits@100": 37,
+          "tiers": {
+            "popular": {
+              "hits": 16,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 18,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 3,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.203
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.02252252252252252,
+          "recall@25": 0.033783783783783786,
+          "recall@100": 0.07207207207207207,
+          "hits@100": 32,
+          "tiers": {
+            "popular": {
+              "hits": 17,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 13,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 2,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.189
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.003496204906509962,
+          "recall@25": 0.008740512266274904,
+          "recall@100": 0.034962049065099615,
+          "hits@100": 15.52
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.0022522522522522522,
+          "recall@25": 0.006756756756756757,
+          "recall@100": 0.02702702702702703,
+          "hits@100": 12,
+          "tiers": {
+            "popular": {
+              "hits": 8,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 4,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.047
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0,
+          "recall@25": 0.0022522522522522522,
+          "recall@100": 0.009009009009009009,
+          "hits@100": 4,
+          "tiers": {
+            "popular": {
+              "hits": 2,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 2,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.01
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.02027027027027027,
+          "recall@25": 0.05855855855855856,
+          "recall@100": 0.16666666666666666,
+          "hits@100": 74,
+          "tiers": {
+            "popular": {
+              "hits": 65,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 9,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.451
+        },
+        "ease": {
+          "recall@10": 0.0472972972972973,
+          "recall@25": 0.09009009009009009,
+          "recall@100": 0.2635135135135135,
+          "hits@100": 117,
+          "tiers": {
+            "popular": {
+              "hits": 62,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 53,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 2,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.28
+        },
+        "ease_positive": {
+          "recall@10": 0.09684684684684684,
+          "recall@25": 0.16666666666666666,
+          "recall@100": 0.3581081081081081,
+          "hits@100": 159,
+          "tiers": {
+            "popular": {
+              "hits": 82,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 72,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 5,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.291
+        },
+        "product_for_you": {
+          "recall@10": 0.04279279279279279,
+          "recall@25": 0.09684684684684684,
+          "recall@100": 0.21621621621621623,
+          "hits@100": 96,
+          "tiers": {
+            "popular": {
+              "hits": 51,
+              "positives": 102
+            },
+            "mid": {
+              "hits": 40,
+              "positives": 211
+            },
+            "rare": {
+              "hits": 5,
+              "positives": 131
+            }
+          },
+          "median_watch_share_top100": 0.287
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2658,
+        "recall_all_3star": 0.2011
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0698,
+          "watched@100": 68,
+          "bad@100": 17,
+          "bad_share": 0.25
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0876,
+          "watched@100": 88,
+          "bad@100": 24,
+          "bad_share": 0.2727
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0958,
+          "watched@100": 85,
+          "bad@100": 15,
+          "bad_share": 0.1765
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0958,
+          "watched@100": 87,
+          "bad@100": 17,
+          "bad_share": 0.1954
+        },
+        "lane2_soft": {
+          "recall@100": 0.0903,
+          "watched@100": 83,
+          "bad@100": 17,
+          "bad_share": 0.2048
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.0834,
+          "watched@100": 74,
+          "bad@100": 13,
+          "bad_share": 0.1757
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0438,
+          "watched@100": 43,
+          "bad@100": 11,
+          "bad_share": 0.2558
+        }
+      },
+      "profiles": 3
+    },
+    "confirmation": {
+      "profiles_folds": 84,
+      "positives": 1541,
+      "positives_3star": 2091,
+      "pool_share": 0.2706,
+      "pool_share_with_ease": 0.4912,
+      "methods": {
+        "app": {
+          "recall@10": 0.01752109020116807,
+          "recall@25": 0.040882543802725504,
+          "recall@100": 0.09604153147306943,
+          "hits@100": 148,
+          "tiers": {
+            "popular": {
+              "hits": 78,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 52,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 18,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.156
+        },
+        "no_neighbors": {
+          "recall@10": 0.015574302401038288,
+          "recall@25": 0.03439325113562622,
+          "recall@100": 0.07787151200519143,
+          "hits@100": 120,
+          "tiers": {
+            "popular": {
+              "hits": 73,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 29,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 18,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.13
+        },
+        "core_only": {
+          "recall@10": 0.01427644386761843,
+          "recall@25": 0.027255029201817,
+          "recall@100": 0.07527579493835172,
+          "hits@100": 116,
+          "tiers": {
+            "popular": {
+              "hits": 71,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 27,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 18,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.13
+        },
+        "no_mmr": {
+          "recall@10": 0.01881894873458793,
+          "recall@25": 0.04282933160285529,
+          "recall@100": 0.10188189487345879,
+          "hits@100": 157,
+          "tiers": {
+            "popular": {
+              "hits": 74,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 60,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 23,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.154
+        },
+        "no_aversion": {
+          "recall@10": 0.015574302401038288,
+          "recall@25": 0.03958468526930565,
+          "recall@100": 0.0973393900064893,
+          "hits@100": 150,
+          "tiers": {
+            "popular": {
+              "hits": 79,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 56,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 15,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.156
+        },
+        "no_idf": {
+          "recall@10": 0.025957170668397145,
+          "recall@25": 0.046073977936404935,
+          "recall@100": 0.11550940947436729,
+          "hits@100": 178,
+          "tiers": {
+            "popular": {
+              "hits": 100,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 59,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 19,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.169
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.0136275146009085,
+          "recall@25": 0.03439325113562622,
+          "recall@100": 0.09863724853990916,
+          "hits@100": 152,
+          "tiers": {
+            "popular": {
+              "hits": 80,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 53,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 19,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.146
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.003134960446684499,
+          "recall@25": 0.007837401116711246,
+          "recall@100": 0.03134960446684498,
+          "hits@100": 48.31
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.0012978585334198572,
+          "recall@25": 0.004542504866969501,
+          "recall@100": 0.048020765736534715,
+          "hits@100": 74,
+          "tiers": {
+            "popular": {
+              "hits": 49,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 15,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 10,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.046
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0006489292667099286,
+          "recall@25": 0.005191434133679429,
+          "recall@100": 0.016223231667748216,
+          "hits@100": 25,
+          "tiers": {
+            "popular": {
+              "hits": 5,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 12,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 8,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.01
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.016872160934458143,
+          "recall@25": 0.04866969500324465,
+          "recall@100": 0.13497728747566515,
+          "hits@100": 208,
+          "tiers": {
+            "popular": {
+              "hits": 208,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.494
+        },
+        "ease": {
+          "recall@10": 0.053212199870214145,
+          "recall@25": 0.08955223880597014,
+          "recall@100": 0.1946787800129786,
+          "hits@100": 300,
+          "tiers": {
+            "popular": {
+              "hits": 232,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 64,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 4,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.359
+        },
+        "ease_positive": {
+          "recall@10": 0.07722258273848151,
+          "recall@25": 0.13432835820895522,
+          "recall@100": 0.2582738481505516,
+          "hits@100": 398,
+          "tiers": {
+            "popular": {
+              "hits": 263,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 131,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 4,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.339
+        },
+        "product_for_you": {
+          "recall@10": 0.04153147306943543,
+          "recall@25": 0.0882543802725503,
+          "recall@100": 0.19338092147955874,
+          "hits@100": 298,
+          "tiers": {
+            "popular": {
+              "hits": 201,
+              "positives": 381
+            },
+            "mid": {
+              "hits": 91,
+              "positives": 498
+            },
+            "rare": {
+              "hits": 6,
+              "positives": 662
+            }
+          },
+          "median_watch_share_top100": 0.322
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2596,
+        "recall_all_3star": 0.219
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0832,
+          "watched@100": 193,
+          "bad@100": 21,
+          "bad_share": 0.1088
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0937,
+          "watched@100": 229,
+          "bad@100": 35,
+          "bad_share": 0.1528
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.098,
+          "watched@100": 223,
+          "bad@100": 20,
+          "bad_share": 0.0897
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.099,
+          "watched@100": 227,
+          "bad@100": 22,
+          "bad_share": 0.0969
+        },
+        "lane2_soft": {
+          "recall@100": 0.1033,
+          "watched@100": 242,
+          "bad@100": 27,
+          "bad_share": 0.1116
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1009,
+          "watched@100": 231,
+          "bad@100": 20,
+          "bad_share": 0.0866
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0569,
+          "watched@100": 132,
+          "bad@100": 14,
+          "bad_share": 0.1061
+        }
+      },
+      "profiles": 42
+    },
+    "tuning": {
+      "profiles_folds": 116,
+      "positives": 2035,
+      "positives_3star": 2702,
+      "pool_share": 0.2835,
+      "pool_share_with_ease": 0.5445,
+      "methods": {
+        "app": {
+          "recall@10": 0.020147420147420148,
+          "recall@25": 0.04520884520884521,
+          "recall@100": 0.10859950859950859,
+          "hits@100": 221,
+          "tiers": {
+            "popular": {
+              "hits": 121,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 85,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 15,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.157
+        },
+        "no_neighbors": {
+          "recall@10": 0.016216216216216217,
+          "recall@25": 0.03636363636363636,
+          "recall@100": 0.08796068796068796,
+          "hits@100": 179,
+          "tiers": {
+            "popular": {
+              "hits": 108,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 56,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 15,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.132
+        },
+        "core_only": {
+          "recall@10": 0.016707616707616706,
+          "recall@25": 0.029484029484029485,
+          "recall@100": 0.08648648648648649,
+          "hits@100": 176,
+          "tiers": {
+            "popular": {
+              "hits": 102,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 60,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 14,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.131
+        },
+        "no_mmr": {
+          "recall@10": 0.020147420147420148,
+          "recall@25": 0.03636363636363636,
+          "recall@100": 0.09385749385749385,
+          "hits@100": 191,
+          "tiers": {
+            "popular": {
+              "hits": 93,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 83,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 15,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.159
+        },
+        "no_aversion": {
+          "recall@10": 0.019656019656019656,
+          "recall@25": 0.04176904176904177,
+          "recall@100": 0.10810810810810811,
+          "hits@100": 220,
+          "tiers": {
+            "popular": {
+              "hits": 117,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 86,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 17,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.157
+        },
+        "no_idf": {
+          "recall@10": 0.02702702702702703,
+          "recall@25": 0.046191646191646195,
+          "recall@100": 0.11007371007371007,
+          "hits@100": 224,
+          "tiers": {
+            "popular": {
+              "hits": 130,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 78,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 16,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.168
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.022604422604422605,
+          "recall@25": 0.040294840294840296,
+          "recall@100": 0.09680589680589681,
+          "hits@100": 197,
+          "tiers": {
+            "popular": {
+              "hits": 110,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 73,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 14,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.149
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.0034078856510392015,
+          "recall@25": 0.008519714127598003,
+          "recall@100": 0.03407885651039201,
+          "hits@100": 69.35
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.0019656019656019656,
+          "recall@25": 0.004914004914004914,
+          "recall@100": 0.043243243243243246,
+          "hits@100": 88,
+          "tiers": {
+            "popular": {
+              "hits": 55,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 24,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 9,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.05
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0,
+          "recall@25": 0.0029484029484029483,
+          "recall@100": 0.009828009828009828,
+          "hits@100": 20,
+          "tiers": {
+            "popular": {
+              "hits": 6,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 9,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 5,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.011
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.022604422604422605,
+          "recall@25": 0.046191646191646195,
+          "recall@100": 0.13513513513513514,
+          "hits@100": 275,
+          "tiers": {
+            "popular": {
+              "hits": 275,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.49
+        },
+        "ease": {
+          "recall@10": 0.04914004914004914,
+          "recall@25": 0.09287469287469287,
+          "recall@100": 0.20442260442260443,
+          "hits@100": 416,
+          "tiers": {
+            "popular": {
+              "hits": 288,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 125,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 3,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.351
+        },
+        "ease_positive": {
+          "recall@10": 0.07518427518427519,
+          "recall@25": 0.13464373464373464,
+          "recall@100": 0.2835380835380835,
+          "hits@100": 577,
+          "tiers": {
+            "popular": {
+              "hits": 348,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 225,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 4,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.339
+        },
+        "product_for_you": {
+          "recall@10": 0.04717444717444717,
+          "recall@25": 0.085995085995086,
+          "recall@100": 0.19754299754299753,
+          "hits@100": 402,
+          "tiers": {
+            "popular": {
+              "hits": 255,
+              "positives": 488
+            },
+            "mid": {
+              "hits": 136,
+              "positives": 815
+            },
+            "rare": {
+              "hits": 11,
+              "positives": 732
+            }
+          },
+          "median_watch_share_top100": 0.327
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2663,
+        "recall_all_3star": 0.2161
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.094,
+          "watched@100": 270,
+          "bad@100": 18,
+          "bad_share": 0.0667
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0944,
+          "watched@100": 278,
+          "bad@100": 25,
+          "bad_share": 0.0899
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0947,
+          "watched@100": 267,
+          "bad@100": 13,
+          "bad_share": 0.0487
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0962,
+          "watched@100": 272,
+          "bad@100": 14,
+          "bad_share": 0.0515
+        },
+        "lane2_soft": {
+          "recall@100": 0.1118,
+          "watched@100": 319,
+          "bad@100": 19,
+          "bad_share": 0.0596
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1051,
+          "watched@100": 297,
+          "bad@100": 15,
+          "bad_share": 0.0505
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0607,
+          "watched@100": 168,
+          "bad@100": 6,
+          "bad_share": 0.0357
+        }
+      },
+      "profiles": 58
+    },
+    "all_test_users": {
+      "profiles_folds": 200,
+      "positives": 3576,
+      "positives_3star": 4793,
+      "pool_share": 0.278,
+      "pool_share_with_ease": 0.5215,
+      "methods": {
+        "app": {
+          "recall@10": 0.01901565995525727,
+          "recall@25": 0.04334451901565996,
+          "recall@100": 0.10318791946308725,
+          "hits@100": 369,
+          "tiers": {
+            "popular": {
+              "hits": 199,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 137,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.157
+        },
+        "no_neighbors": {
+          "recall@10": 0.015939597315436243,
+          "recall@25": 0.03551454138702461,
+          "recall@100": 0.08361297539149888,
+          "hits@100": 299,
+          "tiers": {
+            "popular": {
+              "hits": 181,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 85,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.131
+        },
+        "core_only": {
+          "recall@10": 0.015659955257270694,
+          "recall@25": 0.028523489932885907,
+          "recall@100": 0.08165548098434004,
+          "hits@100": 292,
+          "tiers": {
+            "popular": {
+              "hits": 173,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 87,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 32,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.131
+        },
+        "no_mmr": {
+          "recall@10": 0.019574944071588368,
+          "recall@25": 0.039149888143176735,
+          "recall@100": 0.09731543624161074,
+          "hits@100": 348,
+          "tiers": {
+            "popular": {
+              "hits": 167,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 143,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 38,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.157
+        },
+        "no_aversion": {
+          "recall@10": 0.017897091722595078,
+          "recall@25": 0.04082774049217002,
+          "recall@100": 0.10346756152125279,
+          "hits@100": 370,
+          "tiers": {
+            "popular": {
+              "hits": 196,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 142,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 32,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.157
+        },
+        "no_idf": {
+          "recall@10": 0.026565995525727068,
+          "recall@25": 0.04614093959731544,
+          "recall@100": 0.11241610738255034,
+          "hits@100": 402,
+          "tiers": {
+            "popular": {
+              "hits": 230,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 137,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 35,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.168
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.01873601789709172,
+          "recall@25": 0.037751677852348994,
+          "recall@100": 0.09759507829977629,
+          "hits@100": 349,
+          "tiers": {
+            "popular": {
+              "hits": 190,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 126,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.148
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.0032902744262319874,
+          "recall@25": 0.00822568606557997,
+          "recall@100": 0.03290274426231988,
+          "hits@100": 117.66
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.0016778523489932886,
+          "recall@25": 0.0047539149888143175,
+          "recall@100": 0.04530201342281879,
+          "hits@100": 162,
+          "tiers": {
+            "popular": {
+              "hits": 104,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 39,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 19,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.048
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0002796420581655481,
+          "recall@25": 0.0039149888143176735,
+          "recall@100": 0.012583892617449664,
+          "hits@100": 45,
+          "tiers": {
+            "popular": {
+              "hits": 11,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 21,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 13,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.011
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.020134228187919462,
+          "recall@25": 0.04725950782997763,
+          "recall@100": 0.13506711409395974,
+          "hits@100": 483,
+          "tiers": {
+            "popular": {
+              "hits": 483,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.492
+        },
+        "ease": {
+          "recall@10": 0.05089485458612975,
+          "recall@25": 0.09144295302013423,
+          "recall@100": 0.20022371364653244,
+          "hits@100": 716,
+          "tiers": {
+            "popular": {
+              "hits": 520,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 189,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 7,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.354
+        },
+        "ease_positive": {
+          "recall@10": 0.07606263982102908,
+          "recall@25": 0.13450782997762864,
+          "recall@100": 0.2726510067114094,
+          "hits@100": 975,
+          "tiers": {
+            "popular": {
+              "hits": 611,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 356,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 8,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.339
+        },
+        "product_for_you": {
+          "recall@10": 0.0447427293064877,
+          "recall@25": 0.08696868008948545,
+          "recall@100": 0.19574944071588368,
+          "hits@100": 700,
+          "tiers": {
+            "popular": {
+              "hits": 456,
+              "positives": 869
+            },
+            "mid": {
+              "hits": 227,
+              "positives": 1313
+            },
+            "rare": {
+              "hits": 17,
+              "positives": 1394
+            }
+          },
+          "median_watch_share_top100": 0.325
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2634,
+        "recall_all_3star": 0.2174
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0893,
+          "watched@100": 463,
+          "bad@100": 39,
+          "bad_share": 0.0842
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0941,
+          "watched@100": 507,
+          "bad@100": 60,
+          "bad_share": 0.1183
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0962,
+          "watched@100": 490,
+          "bad@100": 33,
+          "bad_share": 0.0673
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0974,
+          "watched@100": 499,
+          "bad@100": 36,
+          "bad_share": 0.0721
+        },
+        "lane2_soft": {
+          "recall@100": 0.1081,
+          "watched@100": 561,
+          "bad@100": 46,
+          "bad_share": 0.082
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1033,
+          "watched@100": 528,
+          "bad@100": 35,
+          "bad_share": 0.0663
+        },
+        "product_taste_profile": {
+          "recall@100": 0.059,
+          "watched@100": 300,
+          "bad@100": 20,
+          "bad_share": 0.0667
+        }
+      },
+      "profiles": 100
+    }
+  },
+  "vs_engine_confirmation": {
+    "no_mmr": {
+      "diff_recall": 0.0059,
+      "ci95": [
+        -0.0013,
+        0.0138
+      ]
+    },
+    "no_aversion": {
+      "diff_recall": 0.0013,
+      "ci95": [
+        -0.0039,
+        0.0064
+      ]
+    },
+    "no_idf": {
+      "diff_recall": 0.0195,
+      "ci95": [
+        0.0093,
+        0.0294
+      ]
+    },
+    "no_neighbors": {
+      "diff_recall": -0.0182,
+      "ci95": [
+        -0.0309,
+        -0.0061
+      ]
+    },
+    "no_favorite_cluster": {
+      "diff_recall": 0.0027,
+      "ci95": [
+        -0.0043,
+        0.01
+      ]
+    },
+    "core_only": {
+      "diff_recall": -0.0208,
+      "ci95": [
+        -0.0354,
+        -0.0071
+      ]
+    },
+    "baseline_pool_by_rating": {
+      "diff_recall": -0.048,
+      "ci95": [
+        -0.0676,
+        -0.0281
+      ]
+    },
+    "baseline_catalog_by_rating": {
+      "diff_recall": -0.0799,
+      "ci95": [
+        -0.1022,
+        -0.059
+      ]
+    },
+    "baseline_most_watched": {
+      "diff_recall": 0.0391,
+      "ci95": [
+        0.0178,
+        0.0603
+      ]
+    },
+    "ease": {
+      "diff_recall": 0.0981,
+      "ci95": [
+        0.0585,
+        0.1408
+      ]
+    },
+    "ease_positive": {
+      "diff_recall": 0.1621,
+      "ci95": [
+        0.1207,
+        0.2038
+      ]
+    },
+    "product_for_you": {
+      "diff_recall": 0.0975,
+      "ci95": [
+        0.0702,
+        0.1246
+      ]
+    },
+    "baseline_random_pool": {
+      "diff_recall": -0.0649,
+      "ci95": [
+        -0.0842,
+        -0.0456
+      ]
+    }
+  },
+  "vs_engine_all_profiles": {
+    "no_mmr": {
+      "diff_recall": -0.0062,
+      "ci95": [
+        -0.0119,
+        -0.0006
+      ]
+    },
+    "no_aversion": {
+      "diff_recall": 0.0005,
+      "ci95": [
+        -0.0025,
+        0.0033
+      ]
+    },
+    "no_idf": {
+      "diff_recall": 0.0094,
+      "ci95": [
+        0.0041,
+        0.015
+      ]
+    },
+    "no_neighbors": {
+      "diff_recall": -0.018,
+      "ci95": [
+        -0.0255,
+        -0.0109
+      ]
+    },
+    "no_favorite_cluster": {
+      "diff_recall": -0.005,
+      "ci95": [
+        -0.0094,
+        -0.0007
+      ]
+    },
+    "core_only": {
+      "diff_recall": -0.021,
+      "ci95": [
+        -0.0293,
+        -0.013
+      ]
+    },
+    "baseline_pool_by_rating": {
+      "diff_recall": -0.0567,
+      "ci95": [
+        -0.0697,
+        -0.0441
+      ]
+    },
+    "baseline_catalog_by_rating": {
+      "diff_recall": -0.0878,
+      "ci95": [
+        -0.1021,
+        -0.0742
+      ]
+    },
+    "baseline_most_watched": {
+      "diff_recall": 0.0387,
+      "ci95": [
+        0.0202,
+        0.059
+      ]
+    },
+    "ease": {
+      "diff_recall": 0.1071,
+      "ci95": [
+        0.0764,
+        0.1445
+      ]
+    },
+    "ease_positive": {
+      "diff_recall": 0.182,
+      "ci95": [
+        0.1522,
+        0.2128
+      ]
+    },
+    "product_for_you": {
+      "diff_recall": 0.0981,
+      "ci95": [
+        0.0789,
+        0.1178
+      ]
+    },
+    "baseline_random_pool": {
+      "diff_recall": -0.0668,
+      "ci95": [
+        -0.0799,
+        -0.0546
+      ]
+    }
+  },
+  "lane2_confirmation_ci": {
+    "recall": {
+      "lane2_soft_personal_floor vs lane2_no_floor": {
+        "diff": 0.0072,
+        "ci95": [
+          -0.0024,
+          0.0169
+        ]
+      },
+      "lane2_soft_personal_floor vs lane2_floor_3.4": {
+        "diff": 0.0029,
+        "ci95": [
+          -0.0054,
+          0.0107
+        ]
+      }
+    },
+    "bad_share": {
+      "lane2_soft_personal_floor vs lane2_no_floor": {
+        "diff": -0.0663,
+        "ci95": [
+          -0.1135,
+          -0.0237
+        ]
+      },
+      "lane2_floor_3.4 vs lane2_no_floor": {
+        "diff": -0.0632,
+        "ci95": [
+          -0.0954,
+          -0.0318
+        ]
+      }
+    }
+  },
+  "taste": {
+    "case_profiles": {
+      "films": 1033,
+      "liked": 400,
+      "auc": {
+        "engine": 0.5388,
+        "term_taste_total": 0.4829,
+        "ease_watched": 0.5652,
+        "ease_product": 0.7423,
+        "baseline_popularity": 0.6514,
+        "baseline_letterboxd_rating": 0.7601,
+        "lane1_q0.35": 0.7683,
+        "lane1_q0.5": 0.7732,
+        "lane1_q0.65": 0.7757,
+        "lane1_q0.8": 0.77
+      },
+      "auc_within_quality": {
+        "engine": 0.4712,
+        "term_taste_total": 0.4533,
+        "ease_product": 0.6796
+      }
+    },
+    "confirmation": {
+      "films": 1916,
+      "liked": 1093,
+      "auc": {
+        "engine": 0.5704,
+        "term_taste_total": 0.5338,
+        "ease_watched": 0.5573,
+        "ease_product": 0.64,
+        "baseline_popularity": 0.5658,
+        "baseline_letterboxd_rating": 0.7119,
+        "lane1_q0.35": 0.6766,
+        "lane1_q0.5": 0.6945,
+        "lane1_q0.65": 0.7068,
+        "lane1_q0.8": 0.7117
+      },
+      "auc_within_quality": {
+        "engine": 0.5294,
+        "term_taste_total": 0.525,
+        "ease_product": 0.5692
+      }
+    },
+    "tuning": {
+      "films": 2529,
+      "liked": 1585,
+      "auc": {
+        "engine": 0.5835,
+        "term_taste_total": 0.5331,
+        "ease_watched": 0.5953,
+        "ease_product": 0.7004,
+        "baseline_popularity": 0.617,
+        "baseline_letterboxd_rating": 0.7662,
+        "lane1_q0.35": 0.745,
+        "lane1_q0.5": 0.7635,
+        "lane1_q0.65": 0.7699,
+        "lane1_q0.8": 0.7713
+      },
+      "auc_within_quality": {
+        "engine": 0.5522,
+        "term_taste_total": 0.5445,
+        "ease_product": 0.6027
+      }
+    }
+  },
+  "quality_curves": {
+    "LEGACY": {
+      "like": [
+        0.619,
+        0.737,
+        0.808,
+        0.832,
+        0.804,
+        0.893,
+        0.964
+      ],
+      "bad": [
+        0.381,
+        0.263,
+        0.192,
+        0.168,
+        0.196,
+        0.107,
+        0.036
+      ],
+      "floor": 3.0
+    },
+    "NOIR": {
+      "like": [
+        0.209,
+        0.451,
+        0.635,
+        0.649,
+        0.786,
+        0.768,
+        0.898
+      ],
+      "bad": [
+        0.791,
+        0.549,
+        0.365,
+        0.351,
+        0.214,
+        0.232,
+        0.102
+      ],
+      "floor": 3.6
+    },
+    "MIXTAPE": {
+      "like": [
+        0.215,
+        0.628,
+        0.74,
+        0.859,
+        0.925,
+        0.852,
+        0.92
+      ],
+      "bad": [
+        0.785,
+        0.372,
+        0.26,
+        0.141,
+        0.075,
+        0.148,
+        0.08
+      ],
+      "floor": 3.2
+    }
+  },
+  "quality_bins": [
+    3.0,
+    3.2,
+    3.4,
+    3.6,
+    3.8,
+    4.0
+  ],
+  "fresh": {
+    "source": {
+      "scope": "Independent fresh-user confirmation",
+      "holdout_run": {
+        "commit": "0f661c3fbb0dde3a230a05f1bec7ca2c57f4405d",
+        "dirty": false,
+        "run_at": "2026-09-30T13:10:06.032262+00:00",
+        "parameters": {
+          "folds": 5,
+          "fold_fraction": 0.1,
+          "sample_test_users": 100,
+          "sample_folds": 2,
+          "sample_batch": "fresh",
+          "ease_lambda": 2000.0,
+          "ease_min_users": 5,
+          "ease_max_films": 15000,
+          "ease_candidates": 300,
+          "profile_weighting": "current",
+          "offline": true,
+          "min_year": 1985,
+          "max_year": 2026
+        }
+      },
+      "taste_run": {
+        "commit": "0f661c3fbb0dde3a230a05f1bec7ca2c57f4405d",
+        "dirty": false,
+        "run_at": "2026-09-30T13:20:43.523410+00:00",
+        "parameters": {
+          "folds": 5,
+          "fold_fraction": 0.1,
+          "sample_test_users": 100,
+          "sample_folds": 2,
+          "sample_batch": "fresh",
+          "ease_lambda": 2000.0,
+          "ease_min_users": 5,
+          "ease_max_films": 15000,
+          "ease_candidates": null,
+          "profile_weighting": "current",
+          "offline": true,
+          "min_year": 1985,
+          "max_year": 2026
+        }
+      },
+      "ease_model": {
+        "users": 2000,
+        "films": 15000,
+        "watched_films": 15000,
+        "max_films": 15000,
+        "lambda": 2000.0,
+        "min_users": 5,
+        "candidates_merged": 300,
+        "leaky_users_dropped": 0,
+        "blend_weights": [
+          0.1,
+          0.2,
+          0.3,
+          0.5
+        ],
+        "niche_max_share": 0.05,
+        "quality_weights": [
+          0.2,
+          0.35,
+          0.5
+        ]
+      }
+    },
+    "recall": {
+      "profiles_folds": 200,
+      "positives": 3945,
+      "positives_3star": 5146,
+      "pool_share": 0.2966,
+      "pool_share_with_ease": 0.5594,
+      "methods": {
+        "app": {
+          "recall@10": 0.01926489226869455,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.10063371356147022,
+          "hits@100": 397,
+          "tiers": {
+            "popular": {
+              "hits": 221,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 147,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 29,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.155
+        },
+        "no_neighbors": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.034220532319391636,
+          "recall@100": 0.08415716096324462,
+          "hits@100": 332,
+          "tiers": {
+            "popular": {
+              "hits": 211,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 89,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 32,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.122
+        },
+        "core_only": {
+          "recall@10": 0.014955640050697085,
+          "recall@25": 0.02864385297845374,
+          "recall@100": 0.08010139416983524,
+          "hits@100": 316,
+          "tiers": {
+            "popular": {
+              "hits": 193,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 90,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.119
+        },
+        "no_mmr": {
+          "recall@10": 0.01850443599493029,
+          "recall@25": 0.03700887198986058,
+          "recall@100": 0.09683143219264892,
+          "hits@100": 382,
+          "tiers": {
+            "popular": {
+              "hits": 191,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 160,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 31,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.158
+        },
+        "no_aversion": {
+          "recall@10": 0.018250950570342206,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.09809885931558936,
+          "hits@100": 387,
+          "tiers": {
+            "popular": {
+              "hits": 216,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 144,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 27,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.155
+        },
+        "no_idf": {
+          "recall@10": 0.02129277566539924,
+          "recall@25": 0.04283903675538656,
+          "recall@100": 0.10899873257287707,
+          "hits@100": 430,
+          "tiers": {
+            "popular": {
+              "hits": 236,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 164,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 30,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.167
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.03523447401774398,
+          "recall@100": 0.09429657794676806,
+          "hits@100": 372,
+          "tiers": {
+            "popular": {
+              "hits": 201,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 138,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.145
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.003409409492076676,
+          "recall@25": 0.00852352373019169,
+          "recall@100": 0.03409409492076676,
+          "hits@100": 134.5
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.001520912547528517,
+          "recall@25": 0.007351077313054499,
+          "recall@100": 0.05221799746514576,
+          "hits@100": 206,
+          "tiers": {
+            "popular": {
+              "hits": 144,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 38,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 24,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.041
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0007604562737642585,
+          "recall@25": 0.0038022813688212928,
+          "recall@100": 0.01394169835234474,
+          "hits@100": 55,
+          "tiers": {
+            "popular": {
+              "hits": 26,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 16,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 13,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.01
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.028897338403041824,
+          "recall@25": 0.06438529784537389,
+          "recall@100": 0.17465145754119138,
+          "hits@100": 689,
+          "tiers": {
+            "popular": {
+              "hits": 689,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.483
+        },
+        "ease": {
+          "recall@10": 0.04207858048162231,
+          "recall@25": 0.08086185044359949,
+          "recall@100": 0.19543726235741446,
+          "hits@100": 771,
+          "tiers": {
+            "popular": {
+              "hits": 584,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 182,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 5,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.357
+        },
+        "ease_positive": {
+          "recall@10": 0.07934093789607098,
+          "recall@25": 0.13510773130544992,
+          "recall@100": 0.29100126742712296,
+          "hits@100": 1148,
+          "tiers": {
+            "popular": {
+              "hits": 776,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 354,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 18,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.334
+        },
+        "product_for_you": {
+          "recall@10": 0.04410646387832699,
+          "recall@25": 0.08517110266159696,
+          "recall@100": 0.2035487959442332,
+          "hits@100": 803,
+          "tiers": {
+            "popular": {
+              "hits": 535,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 238,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 30,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.315
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2738,
+        "recall_all_3star": 0.2303
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0878,
+          "watched@100": 484,
+          "bad@100": 33,
+          "bad_share": 0.0682
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0987,
+          "watched@100": 544,
+          "bad@100": 38,
+          "bad_share": 0.0699
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0995,
+          "watched@100": 539,
+          "bad@100": 29,
+          "bad_share": 0.0538
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0987,
+          "watched@100": 535,
+          "bad@100": 29,
+          "bad_share": 0.0542
+        },
+        "lane2_soft": {
+          "recall@100": 0.1145,
+          "watched@100": 621,
+          "bad@100": 34,
+          "bad_share": 0.0548
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1131,
+          "watched@100": 608,
+          "bad@100": 28,
+          "bad_share": 0.0461
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0626,
+          "watched@100": 343,
+          "bad@100": 21,
+          "bad_share": 0.0612
+        }
+      },
+      "profiles": 100
+    },
+    "vs_engine": {
+      "baseline_random_pool vs app": {
+        "diff": -0.0665,
+        "ci95": [
+          -0.0775,
+          -0.056
+        ]
+      },
+      "baseline_pool_by_rating vs app": {
+        "diff": -0.0484,
+        "ci95": [
+          -0.0595,
+          -0.0375
+        ]
+      },
+      "baseline_catalog_by_rating vs app": {
+        "diff": -0.0867,
+        "ci95": [
+          -0.098,
+          -0.0755
+        ]
+      },
+      "baseline_most_watched vs app": {
+        "diff": 0.074,
+        "ci95": [
+          0.0553,
+          0.0932
+        ]
+      },
+      "ease vs app": {
+        "diff": 0.0948,
+        "ci95": [
+          0.076,
+          0.1154
+        ]
+      },
+      "ease_positive vs app": {
+        "diff": 0.1904,
+        "ci95": [
+          0.1715,
+          0.2092
+        ]
+      },
+      "product_for_you vs app": {
+        "diff": 0.1029,
+        "ci95": [
+          0.0889,
+          0.117
+        ]
+      },
+      "no_neighbors vs app": {
+        "diff": -0.0165,
+        "ci95": [
+          -0.0251,
+          -0.0086
+        ]
+      },
+      "core_only vs app": {
+        "diff": -0.0205,
+        "ci95": [
+          -0.0301,
+          -0.0114
+        ]
+      },
+      "no_idf vs app": {
+        "diff": 0.0084,
+        "ci95": [
+          0.0013,
+          0.0154
+        ]
+      },
+      "no_mmr vs app": {
+        "diff": -0.0038,
+        "ci95": [
+          -0.0089,
+          0.0014
+        ]
+      },
+      "no_aversion vs app": {
+        "diff": -0.0025,
+        "ci95": [
+          -0.0052,
+          0.0
+        ]
+      },
+      "no_favorite_cluster vs app": {
+        "diff": -0.0063,
+        "ci95": [
+          -0.0109,
+          -0.0018
+        ]
+      }
+    },
+    "lane2_ci": {
+      "recall": {
+        "lane2_soft_personal_floor vs lane2_no_floor": {
+          "diff": 0.0144,
+          "ci95": [
+            0.0084,
+            0.0206
+          ]
+        },
+        "lane2_soft_personal_floor vs lane2_floor_3.4": {
+          "diff": 0.0136,
+          "ci95": [
+            0.0091,
+            0.0183
+          ]
+        }
+      },
+      "bad_share": {
+        "lane2_soft_personal_floor vs lane2_no_floor": {
+          "diff": -0.0238,
+          "ci95": [
+            -0.0434,
+            -0.0058
+          ]
+        },
+        "lane2_floor_3.4 vs lane2_no_floor": {
+          "diff": -0.016,
+          "ci95": [
+            -0.037,
+            0.0036
+          ]
+        }
+      }
+    },
+    "taste": {
+      "films": 4903,
+      "liked": 3147,
+      "auc": {
+        "engine": 0.5772,
+        "term_taste_total": 0.5298,
+        "ease_watched": 0.613,
+        "ease_product": 0.6856,
+        "baseline_popularity": 0.6096,
+        "baseline_letterboxd_rating": 0.7576,
+        "lane1_q0.35": 0.7305,
+        "lane1_q0.5": 0.7478,
+        "lane1_q0.65": 0.7578,
+        "lane1_q0.8": 0.7601
+      },
+      "auc_within_quality": {
+        "engine": 0.5325,
+        "term_taste_total": 0.5221,
+        "ease_product": 0.6091
+      }
+    }
+  },
+  "sample_fresh": {
+    "users_checked": 2797,
+    "users_ok": 2100,
+    "rejected": {
+      "too_few": 133,
+      "low_signal": 564
+    },
+    "strata": {
+      "profile": 1093,
+      "random": 669,
+      "new": 338
+    },
+    "films_per_user": {
+      "p10": 123.0,
+      "median": 701.0,
+      "p90": 3024.0,
+      "mean": 1092.0
+    },
+    "ratings": 2293168,
+    "distinct_films": 135122,
+    "films_with_5_watchers": 35297,
+    "model_films": 15000,
+    "max_model_films": 15000,
+    "test_users": {
+      "kept": 100,
+      "checked": 462,
+      "by_reason": {
+        "library_size": 122,
+        "low_signal": 6,
+        "no_diary": 78,
+        "ok": 100,
+        "sparse": 87,
+        "unrated": 69
+      }
+    },
+    "training_users": 2000,
+    "test_user_diary_entries": {
+      "p10": 135.1,
+      "median": 380.5,
+      "p90": 600.0,
+      "mean": 368.3
+    },
+    "catalog_films": 57565,
+    "model_films_in_catalog": 15000
+  },
+  "model_comparison": {
+    "previous_source": {
+      "commit": "0f661c3fbb0dde3a230a05f1bec7ca2c57f4405d",
+      "dirty": false,
+      "run_at": "2026-09-30T13:21:38.244935+00:00",
+      "parameters": {
+        "folds": 5,
+        "fold_fraction": 0.1,
+        "sample_test_users": 100,
+        "sample_folds": 2,
+        "sample_batch": "fresh",
+        "ease_lambda": 1000.0,
+        "ease_min_users": 5,
+        "ease_max_films": 15000,
+        "ease_candidates": 300,
+        "profile_weighting": "current",
+        "offline": true,
+        "min_year": 1985,
+        "max_year": 2026
+      }
+    },
+    "previous_taste_source": {
+      "commit": "0f661c3fbb0dde3a230a05f1bec7ca2c57f4405d",
+      "dirty": false,
+      "run_at": "2026-09-30T13:31:50.037046+00:00",
+      "parameters": {
+        "folds": 5,
+        "fold_fraction": 0.1,
+        "sample_test_users": 100,
+        "sample_folds": 2,
+        "sample_batch": "fresh",
+        "ease_lambda": 1000.0,
+        "ease_min_users": 5,
+        "ease_max_films": 15000,
+        "ease_candidates": null,
+        "profile_weighting": "current",
+        "offline": true,
+        "min_year": 1985,
+        "max_year": 2026
+      }
+    },
+    "previous_model": {
+      "users": 400,
+      "films": 7582,
+      "watched_films": 15000,
+      "max_films": 15000,
+      "lambda": 1000.0,
+      "min_users": 5,
+      "candidates_merged": 300,
+      "leaky_users_dropped": 0,
+      "blend_weights": [
+        0.1,
+        0.2,
+        0.3,
+        0.5
+      ],
+      "niche_max_share": 0.05,
+      "quality_weights": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    },
+    "current_model": {
+      "users": 2000,
+      "films": 15000,
+      "watched_films": 15000,
+      "max_films": 15000,
+      "lambda": 2000.0,
+      "min_users": 5,
+      "candidates_merged": 300,
+      "leaky_users_dropped": 0,
+      "blend_weights": [
+        0.1,
+        0.2,
+        0.3,
+        0.5
+      ],
+      "niche_max_share": 0.05,
+      "quality_weights": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    },
+    "users": 100,
+    "previous_recall": {
+      "profiles_folds": 200,
+      "positives": 3945,
+      "positives_3star": 5146,
+      "pool_share": 0.2966,
+      "pool_share_with_ease": 0.5425,
+      "methods": {
+        "app": {
+          "recall@10": 0.01926489226869455,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.10063371356147022,
+          "hits@100": 397,
+          "tiers": {
+            "popular": {
+              "hits": 243,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 134,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 20,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.179
+        },
+        "no_neighbors": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.034220532319391636,
+          "recall@100": 0.08415716096324462,
+          "hits@100": 332,
+          "tiers": {
+            "popular": {
+              "hits": 223,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 87,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 22,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.142
+        },
+        "core_only": {
+          "recall@10": 0.014955640050697085,
+          "recall@25": 0.02864385297845374,
+          "recall@100": 0.08010139416983524,
+          "hits@100": 316,
+          "tiers": {
+            "popular": {
+              "hits": 204,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 88,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 24,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.139
+        },
+        "no_mmr": {
+          "recall@10": 0.01850443599493029,
+          "recall@25": 0.03700887198986058,
+          "recall@100": 0.09683143219264892,
+          "hits@100": 382,
+          "tiers": {
+            "popular": {
+              "hits": 221,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 140,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 21,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.182
+        },
+        "no_aversion": {
+          "recall@10": 0.018250950570342206,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.09809885931558936,
+          "hits@100": 387,
+          "tiers": {
+            "popular": {
+              "hits": 237,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 131,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 19,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.18
+        },
+        "no_idf": {
+          "recall@10": 0.02129277566539924,
+          "recall@25": 0.04283903675538656,
+          "recall@100": 0.10899873257287707,
+          "hits@100": 430,
+          "tiers": {
+            "popular": {
+              "hits": 260,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 150,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 20,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.193
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.03523447401774398,
+          "recall@100": 0.09429657794676806,
+          "hits@100": 372,
+          "tiers": {
+            "popular": {
+              "hits": 223,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 125,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 24,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.167
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.003409409492076676,
+          "recall@25": 0.00852352373019169,
+          "recall@100": 0.03409409492076676,
+          "hits@100": 134.5
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.001520912547528517,
+          "recall@25": 0.007351077313054499,
+          "recall@100": 0.05221799746514576,
+          "hits@100": 206,
+          "tiers": {
+            "popular": {
+              "hits": 144,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 43,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 19,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.049
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0007604562737642585,
+          "recall@25": 0.0038022813688212928,
+          "recall@100": 0.01394169835234474,
+          "hits@100": 55,
+          "tiers": {
+            "popular": {
+              "hits": 26,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 18,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 11,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.009
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.020278833967046894,
+          "recall@25": 0.04664131812420786,
+          "recall@100": 0.15158428390367554,
+          "hits@100": 598,
+          "tiers": {
+            "popular": {
+              "hits": 598,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.522
+        },
+        "ease": {
+          "recall@10": 0.044359949302915085,
+          "recall@25": 0.08593155893536121,
+          "recall@100": 0.19847908745247148,
+          "hits@100": 783,
+          "tiers": {
+            "popular": {
+              "hits": 667,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 115,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 1,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.421
+        },
+        "ease_positive": {
+          "recall@10": 0.07224334600760456,
+          "recall@25": 0.1302915082382763,
+          "recall@100": 0.26844106463878326,
+          "hits@100": 1059,
+          "tiers": {
+            "popular": {
+              "hits": 836,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 220,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 3,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.392
+        },
+        "product_for_you": {
+          "recall@10": 0.04410646387832699,
+          "recall@25": 0.0826362484157161,
+          "recall@100": 0.1944233206590621,
+          "hits@100": 767,
+          "tiers": {
+            "popular": {
+              "hits": 565,
+              "positives": 1285
+            },
+            "mid": {
+              "hits": 190,
+              "positives": 1373
+            },
+            "rare": {
+              "hits": 12,
+              "positives": 1287
+            }
+          },
+          "median_watch_share_top100": 0.363
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2672,
+        "recall_all_3star": 0.2246
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0878,
+          "watched@100": 484,
+          "bad@100": 33,
+          "bad_share": 0.0682
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0979,
+          "watched@100": 542,
+          "bad@100": 40,
+          "bad_share": 0.0738
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0983,
+          "watched@100": 532,
+          "bad@100": 28,
+          "bad_share": 0.0526
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0993,
+          "watched@100": 537,
+          "bad@100": 28,
+          "bad_share": 0.0521
+        },
+        "lane2_soft": {
+          "recall@100": 0.1131,
+          "watched@100": 611,
+          "bad@100": 31,
+          "bad_share": 0.0507
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1113,
+          "watched@100": 597,
+          "bad@100": 26,
+          "bad_share": 0.0436
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0647,
+          "watched@100": 353,
+          "bad@100": 20,
+          "bad_share": 0.0567
+        }
+      }
+    },
+    "current_recall": {
+      "profiles_folds": 200,
+      "positives": 3945,
+      "positives_3star": 5146,
+      "pool_share": 0.2966,
+      "pool_share_with_ease": 0.5594,
+      "methods": {
+        "app": {
+          "recall@10": 0.01926489226869455,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.10063371356147022,
+          "hits@100": 397,
+          "tiers": {
+            "popular": {
+              "hits": 221,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 147,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 29,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.155
+        },
+        "no_neighbors": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.034220532319391636,
+          "recall@100": 0.08415716096324462,
+          "hits@100": 332,
+          "tiers": {
+            "popular": {
+              "hits": 211,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 89,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 32,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.122
+        },
+        "core_only": {
+          "recall@10": 0.014955640050697085,
+          "recall@25": 0.02864385297845374,
+          "recall@100": 0.08010139416983524,
+          "hits@100": 316,
+          "tiers": {
+            "popular": {
+              "hits": 193,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 90,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.119
+        },
+        "no_mmr": {
+          "recall@10": 0.01850443599493029,
+          "recall@25": 0.03700887198986058,
+          "recall@100": 0.09683143219264892,
+          "hits@100": 382,
+          "tiers": {
+            "popular": {
+              "hits": 191,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 160,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 31,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.158
+        },
+        "no_aversion": {
+          "recall@10": 0.018250950570342206,
+          "recall@25": 0.03929024081115336,
+          "recall@100": 0.09809885931558936,
+          "hits@100": 387,
+          "tiers": {
+            "popular": {
+              "hits": 216,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 144,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 27,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.155
+        },
+        "no_idf": {
+          "recall@10": 0.02129277566539924,
+          "recall@25": 0.04283903675538656,
+          "recall@100": 0.10899873257287707,
+          "hits@100": 430,
+          "tiers": {
+            "popular": {
+              "hits": 236,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 164,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 30,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.167
+        },
+        "no_favorite_cluster": {
+          "recall@10": 0.01723700887198986,
+          "recall@25": 0.03523447401774398,
+          "recall@100": 0.09429657794676806,
+          "hits@100": 372,
+          "tiers": {
+            "popular": {
+              "hits": 201,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 138,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 33,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.145
+        },
+        "baseline_random_pool": {
+          "recall@10": 0.003409409492076676,
+          "recall@25": 0.00852352373019169,
+          "recall@100": 0.03409409492076676,
+          "hits@100": 134.5
+        },
+        "baseline_pool_by_rating": {
+          "recall@10": 0.001520912547528517,
+          "recall@25": 0.007351077313054499,
+          "recall@100": 0.05221799746514576,
+          "hits@100": 206,
+          "tiers": {
+            "popular": {
+              "hits": 144,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 38,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 24,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.041
+        },
+        "baseline_catalog_by_rating": {
+          "recall@10": 0.0007604562737642585,
+          "recall@25": 0.0038022813688212928,
+          "recall@100": 0.01394169835234474,
+          "hits@100": 55,
+          "tiers": {
+            "popular": {
+              "hits": 26,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 16,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 13,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.01
+        },
+        "baseline_most_watched": {
+          "recall@10": 0.028897338403041824,
+          "recall@25": 0.06438529784537389,
+          "recall@100": 0.17465145754119138,
+          "hits@100": 689,
+          "tiers": {
+            "popular": {
+              "hits": 689,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 0,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 0,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.483
+        },
+        "ease": {
+          "recall@10": 0.04207858048162231,
+          "recall@25": 0.08086185044359949,
+          "recall@100": 0.19543726235741446,
+          "hits@100": 771,
+          "tiers": {
+            "popular": {
+              "hits": 584,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 182,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 5,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.357
+        },
+        "ease_positive": {
+          "recall@10": 0.07934093789607098,
+          "recall@25": 0.13510773130544992,
+          "recall@100": 0.29100126742712296,
+          "hits@100": 1148,
+          "tiers": {
+            "popular": {
+              "hits": 776,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 354,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 18,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.334
+        },
+        "product_for_you": {
+          "recall@10": 0.04410646387832699,
+          "recall@25": 0.08517110266159696,
+          "recall@100": 0.2035487959442332,
+          "hits@100": 803,
+          "tiers": {
+            "popular": {
+              "hits": 535,
+              "positives": 1105
+            },
+            "mid": {
+              "hits": 238,
+              "positives": 1425
+            },
+            "rare": {
+              "hits": 30,
+              "positives": 1415
+            }
+          },
+          "median_watch_share_top100": 0.315
+        }
+      },
+      "both_lanes": {
+        "recall_all_liked": 0.2738,
+        "recall_all_3star": 0.2303
+      },
+      "lane2": {
+        "app": {
+          "recall@100": 0.0878,
+          "watched@100": 484,
+          "bad@100": 33,
+          "bad_share": 0.0682
+        },
+        "lane2_no_floor": {
+          "recall@100": 0.0987,
+          "watched@100": 544,
+          "bad@100": 38,
+          "bad_share": 0.0699
+        },
+        "lane2_floor_3.4": {
+          "recall@100": 0.0995,
+          "watched@100": 539,
+          "bad@100": 29,
+          "bad_share": 0.0538
+        },
+        "lane2_personal_floor": {
+          "recall@100": 0.0987,
+          "watched@100": 535,
+          "bad@100": 29,
+          "bad_share": 0.0542
+        },
+        "lane2_soft": {
+          "recall@100": 0.1145,
+          "watched@100": 621,
+          "bad@100": 34,
+          "bad_share": 0.0548
+        },
+        "lane2_soft_personal_floor": {
+          "recall@100": 0.1131,
+          "watched@100": 608,
+          "bad@100": 28,
+          "bad_share": 0.0461
+        },
+        "product_taste_profile": {
+          "recall@100": 0.0626,
+          "watched@100": 343,
+          "bad@100": 21,
+          "bad_share": 0.0612
+        }
+      }
+    },
+    "paired_recall_ci": {
+      "current_baseline_most_watched vs previous_baseline_most_watched": {
+        "diff": 0.0231,
+        "ci95": [
+          0.0166,
+          0.0294
+        ]
+      },
+      "current_ease vs previous_ease": {
+        "diff": -0.003,
+        "ci95": [
+          -0.0121,
+          0.0061
+        ]
+      },
+      "current_ease_positive vs previous_ease_positive": {
+        "diff": 0.0226,
+        "ci95": [
+          0.0132,
+          0.0323
+        ]
+      },
+      "current_product_for_you vs previous_product_for_you": {
+        "diff": 0.0091,
+        "ci95": [
+          0.0027,
+          0.0158
+        ]
+      }
+    },
+    "taste_common_vocabulary": {
+      "previous": {
+        "films": 4457,
+        "liked": 2948,
+        "auc": {
+          "engine": 0.574,
+          "term_taste_total": 0.5302,
+          "ease_watched": 0.6015,
+          "ease_product": 0.678,
+          "baseline_popularity": 0.5965,
+          "baseline_letterboxd_rating": 0.7469,
+          "lane1_q0.35": 0.7217,
+          "lane1_q0.5": 0.7384,
+          "lane1_q0.65": 0.7468,
+          "lane1_q0.8": 0.7477
+        },
+        "auc_within_quality": {
+          "engine": 0.5282,
+          "term_taste_total": 0.5194,
+          "ease_product": 0.6034
+        }
+      },
+      "current": {
+        "films": 4457,
+        "liked": 2948,
+        "auc": {
+          "engine": 0.574,
+          "term_taste_total": 0.5302,
+          "ease_watched": 0.6039,
+          "ease_product": 0.6808,
+          "baseline_popularity": 0.5997,
+          "baseline_letterboxd_rating": 0.7469,
+          "lane1_q0.35": 0.7269,
+          "lane1_q0.5": 0.7428,
+          "lane1_q0.65": 0.7504,
+          "lane1_q0.8": 0.75
+        },
+        "auc_within_quality": {
+          "engine": 0.5282,
+          "term_taste_total": 0.5194,
+          "ease_product": 0.6128
+        }
+      }
+    }
+  }
+}

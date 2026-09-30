@@ -1,0 +1,21 @@
+{
+  "fresh_users": 100,
+  "overlap_current_training": 0,
+  "overlap_previous_users": 0,
+  "current_training_users": 2000,
+  "original_training_ratings_sha256": "045cecd72b6dff8a43f58eed2c2a2e049eeb78e3499d97913548957ca8a8d06d",
+  "selected_users_sha256": "f7d872a6d3b1ca6600d49650405b4611bfb4eb2becbf21674b5f2fa0fcc86ccd",
+  "replication": {
+    "users": 2000,
+    "films": 15000,
+    "lambda": 2000.0,
+    "fit_seconds": 5.36,
+    "peak_rss_gib": 1.942,
+    "stored_model_version": "20260928T054231Z",
+    "vocabulary_matches": true,
+    "weights_checked": 30000,
+    "max_weight_difference": 4.999438971281522e-07
+  },
+  "cache_sha256": "53b56c0dbd0604acaedafb620f7025036b71703e10055df76da4fd7011c863f4",
+  "overlap_historical_evaluation_users": 0
+}

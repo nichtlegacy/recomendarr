@@ -48,7 +48,17 @@ if [ -d "$ROOT/picks/u" ]; then
   cp -R "$ROOT"/picks/u/. "$OUT/u/"
   # picks.json is the generator's re-render source, not something to serve.
   find "$OUT/u" -name picks.json -delete
-  while IFS= read -r page; do bust "$page"; done < <(find "$OUT/u" -name index.html)
+  while IFS= read -r page; do
+    # Older generated pages still carry the public request navigation/footer.
+    # Normalize the published copy so private re-renders keep the showcase nav.
+    sed -e '/class="nav-item".*>Get yours<\/a>/d' \
+        -e '/<p>Want a page removed?/d' \
+        -e 's|</svg>Picks</a>|</svg>Pics</a>|g' \
+        -e 's|</svg>How it works</a>|</svg>How It Works</a>|g' \
+        "$page" > "$page.tmp"
+    mv "$page.tmp" "$page"
+    bust "$page"
+  done < <(find "$OUT/u" -name index.html)
   pages="$(find "$OUT/u" -mindepth 2 -maxdepth 2 -name index.html | wc -l | tr -d ' ')"
 fi
 

@@ -4,156 +4,110 @@
 
 # Recomendarr
 
-**Film picks from your Letterboxd diary, ranked by what you already loved.**
+**A personal film recommendation project built around Letterboxd.**
 <br>
-Around a hundred films you haven't logged yet, each with the reason it's there,
-on a page of your own and as a list you can import into Letterboxd.
+From a film diary to ranked recommendations, with a reason behind every pick.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-static%20HTML-222222?logo=githubpages&logoColor=white)](.github/workflows/pages.yml)
-[![Letterboxd import](https://img.shields.io/badge/Letterboxd-CSV%20list%20import-00E054)](#import-into-letterboxd)
-[![No tracking](https://img.shields.io/badge/Tracking-none-16A34A)](#your-data)
-[![Pages on request](https://img.shields.io/badge/Pages-on%20request%20only-40BCF4)](#get-your-picks)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-static%20HTML-222222?logo=githubpages&logoColor=white)](https://recomendarr.nichtlegacy.com)
+[![Explainable recommendations](https://img.shields.io/badge/Recommendations-explainable-00E054)](#how-it-works)
+[![Private project](https://img.shields.io/badge/Project-private-40BCF4)](#overview)
 
-[Website](https://recomendarr.nichtlegacy.com) • [Paper](https://recomendarr.nichtlegacy.com/paper/) • [Get your picks](#get-your-picks) • [What's on a page](#whats-on-a-page) • [How it works](#how-it-works) • [Your data](#your-data) • [Repository](#repository)
-
-<img src=".github/images/picks-desktop.png" alt="A Recomendarr page: the backdrop of the top pick behind the username, the taste summary, the import button and the first ranked films" width="760">
+[Pics](#pics) • [How It Works](#how-it-works)
 
 </div>
 
 ## Overview
 
-Recomendarr reads a public Letterboxd diary, works out the themes, genres,
-people and films someone rates highest, and ranks the films they haven't logged
-yet against that taste. This repository is the public side of it: the site and
-the pages that people asked for.
+I built Recomendarr to explore how a Letterboxd diary can become a useful,
+explainable answer to “what should I watch next?” It combines a taste profile
+from ratings, likes and film metadata with collaborative filtering, then
+presents unseen films with the signals behind their scores.
 
-The project stays deliberately:
+This repository showcases the interface and documents the method. The
+recommendation engine lives in a separate, private repository, and I run the
+project for private use.
 
-- **on request**: a page exists only because someone asked for one. There is
-  no directory of users.
-- **link-only**: pages sit at unguessable addresses and tell search engines to
-  stay away.
-- **explainable**: every pick shows why it's there and how its score adds up.
-- **static**: plain HTML and CSS with a few lines of script. No backend, no
-  cookies, no analytics.
+## Pics
 
-> An unofficial hobby project, not affiliated with Letterboxd. The engine that
-> computes the picks lives in a separate, private repository.
+<img src=".github/images/picks-desktop.png" alt="The Recomendarr interface: film backdrop, taste summary and ranked recommendations" width="760">
 
-## Get your picks
+The interface keeps two recommendation lanes separate:
 
-1. **Comment your Letterboxd username** in the Reddit thread, e.g. `nichtlegacy`.
-   Add a release span like `1990-2010` if you only want films from those years.
-   If you'd rather not ask in public, send a DM instead.
-2. **Get a link back** to your page.
-3. **Import the list** into Letterboxd, if you want it there too.
-
-## What's on a page
+- **For you** combines collaborative filtering with the Letterboxd average.
+- **Your taste** uses themes, genres, directors, actors and favourite films,
+  with a quality floor learned from the profile's ratings.
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-- **Ranked picks** with poster, year, runtime, director and Letterboxd rating.
-- **Because you loved…**: the films in your diary that Letterboxd places next
-  to the pick.
-- **Why this pick**: expand any film to see the reasons in plain words, the score
-  broken into its parts, the themes and people that matched, and links to
-  Letterboxd, IMDb and TMDB.
-- **Genre filter** and a **poster wall** view.
-- **Import to Letterboxd** from the header, or from a bar at the bottom on phones.
+- **Ranked films** with posters, release year, runtime, director and rating.
+- **Because you loved…** connects a pick to favourite films in the profile.
+- **Why this pick** explains the score, matching themes and people.
+- **Genre filters** and a **poster wall** provide different ways to explore.
+- **CSV export** preserves the ranking and explanations as a Letterboxd list.
+- **Responsive layout** adapts the same interface to desktop and phone.
 
 </td>
 <td width="50%" align="center">
 
-<img src=".github/images/picks-why.png" alt="The expanded Why this pick panel on a phone: reasons, then score bars" width="300">
+<img src=".github/images/picks-why.png" alt="The expanded Why this pick panel on a phone, showing reasons and score components" width="300">
 
 </td>
 </tr>
 </table>
 
-### Import into Letterboxd
+The [website](https://recomendarr.nichtlegacy.com) includes an example of the
+rendered recommendations and the research behind them.
 
-Each page comes with a CSV in
-[Letterboxd's import format](https://letterboxd.com/about/importing-data/):
-`tmdbID, imdbID, Title, Year, Directors`. The IDs match films exactly, and
-Letterboxd keeps the order of the file, so the list comes out ranked the same
-way as the page.
-
-Download the CSV, create a list at
-[letterboxd.com/list/new](https://letterboxd.com/list/new/), click **Import**
-and pick the file. Importing works on letterboxd.com in a browser, not in the
-Letterboxd apps.
-
-## How it works
+## How It Works
 
 ```mermaid
 flowchart LR
-    DIARY["Your public diary<br/>ratings · likes · reviews"] --> PROFILE["Taste profile<br/>themes · genres · people<br/>favourites · dislikes"]
-    PROFILE --> POOL["Candidate pool<br/>top themes and people<br/>films near your favourites"]
-    POOL --> SCORE["Score and rank<br/>drop what you've logged<br/>keep the list varied"]
-    SCORE --> PAGE["Your page<br/>+ Letterboxd CSV"]
+    DIARY["Letterboxd diary<br/>ratings · likes · rewatches"] --> PROFILE["Taste profile<br/>themes · genres · people<br/>favourites · aversions"]
+    PROFILE --> POOL["Candidate pool<br/>content matches · film neighbours"]
+    DIARY --> EASE["EASE model<br/>collaborative filtering"]
+    POOL --> LANES["Two recommendation lanes<br/>For you · Your taste"]
+    EASE --> LANES
+    LANES --> PAGE["Explained picks<br/>static HTML · CSV export"]
 ```
 
-A pick's match score blends three signals:
+1. **Build a profile.** Weight the diary's themes, genres and people using
+   ratings, likes and rewatches, including patterns associated with low ratings.
+2. **Find candidates.** Combine films from those content signals with neighbours
+   of favourite films and an EASE collaborative model trained on a sample of
+   public Letterboxd profiles.
+3. **Filter and rank.** Exclude already logged films, apply film and quality
+   filters, and score each lane according to its purpose.
+4. **Explain the result.** Render the recommendations with score components,
+   matching metadata and links to the films behind each pick.
 
-```mermaid
-flowchart LR
-    T["Taste points<br/>themes · sub-themes · genres<br/>directors · actors · favourites<br/>minus patterns you rated low"] -->|"scaled to 0–100 · 65%"| M(("Match"))
-    Q["Letterboxd rating<br/>on a fixed 0–100 scale"] -->|"30%"| M
-    MO["Mood<br/>(unused on these pages)"] -->|"5%"| M
-```
+I evaluated the approach against rating, popularity and collaborative baselines,
+using temporal holdouts to distinguish predicting future favourites from
+separating liked and disliked films. Those comparisons led to the two-lane
+design: collaborative filtering predicts future favourites better, while the
+content engine also reaches rarer films.
 
-The full method, with a temporal holdout evaluation, is in the paper:
-[on the website](https://recomendarr.nichtlegacy.com/paper/), as
-[Markdown](site/paper/how-we-recommend-films.md), or as a
-[single HTML file](site/paper/recomendarr-paper.html) that opens offline.
+The full method, evaluation and limitations are in
+[How Recomendarr Recommends Films](https://recomendarr.nichtlegacy.com/paper/),
+also available as [Markdown](site/paper/how-we-recommend-films.md) and a
+[standalone HTML paper](site/paper/recomendarr-paper.html).
 
-## Your data
+### Implementation
 
-- **Only public data.** The engine reads your public diary and ratings, the
-  same pages anyone can open on Letterboxd.
-- **Picks, not your diary.** The page shows recommendations and the tastes they
-  match. It doesn't show your diary, your ratings or your reviews.
-- **Out of search engines.** Every personal page carries
-  `noindex, nofollow, noarchive`. They stay reachable for link previews on
-  Reddit and Discord.
-- **Not in this repository.** Personal pages are stored privately, so this
-  public repository holds no usernames and no picks.
-- **Removed on request.** Ask on Reddit or
-  [open an issue](https://github.com/nichtlegacy/recomendarr/issues/new) and
-  the page is taken off the site.
+The public site is static HTML and CSS with small scripts for filtering, layout
+switching and navigation. GitHub Pages serves the showcase and paper; a build
+step checks local assets, links and CSV files before publication. Generated
+recommendation pages are stored separately from this public repository.
 
-## Repository
-
-```text
-site/                     landing, 404, favicon, robots, sitemap
-site/paper/               the paper: page, raw Markdown and its assets
-site/app.css              the one stylesheet, shared by every page including u/
-scripts/build_site.sh     assembles _site/ and checks it
-.github/workflows/        Pages deploy
-picks/                    gitignored: personal pages, checked out from a private repo
-```
-
-Personal pages are not in this repository. They live in a private repository,
-and the Pages workflow reads them with a read-only deploy key (the Actions
-secret `PICKS_DEPLOY_KEY`) and publishes them together with the site. Each page
-is reachable only by its own link; nothing here lists them.
-
-```sh
-scripts/build_site.sh              # build _site/ (includes picks/ when present)
-scripts/build_site.sh --serve      # build, then serve on 0.0.0.0:8000
-scripts/build_site.sh --serve 8766 # on another port
-```
-
-The build fails when a placeholder is left unfilled, a referenced file is
-missing, or a page has lost its CSV.
+The interface has no cookies or analytics. The engine reads public Letterboxd
+data; the rendered pages show recommendations and their explanations rather
+than reproducing a diary or reviews.
 
 ## Disclaimer
 
-**Recomendarr is an unofficial, independent hobby project.** It is not
-affiliated with, endorsed by or connected to Letterboxd Limited. Posters and
-film data belong to their respective owners and are shown as Letterboxd serves
-them.
+Recomendarr is an unofficial, independent hobby project, unaffiliated with
+Letterboxd Limited. Posters and film data belong to their respective owners
+and are shown as Letterboxd serves them.
 
 <p align="center"><sub>Built by <a href="https://github.com/nichtlegacy">nichtlegacy</a></sub></p>

@@ -63,7 +63,7 @@ img { display: block; }
 /* Phones: the items drop to a second row of pills, like the app's mobile nav. */
 @media (max-width: 767px) {
   .nav { flex-wrap: wrap; height: auto; padding-top: 10px; row-gap: 10px; }
-  .nav-items { position: static; translate: none; order: 3; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .nav-items { position: static; translate: none; order: 3; width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 }
 .nav-item {
   position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 6px 2px;
@@ -85,7 +85,7 @@ img { display: block; }
   .nav-item::after { display: none; }
   .nav-item[aria-current="page"] { border-color: rgba(0, 224, 84, .28); background: rgba(0, 224, 84, .08); }
 }
-/* Three pills on a phone: one line each; below 440px the icons make room for the label. */
+/* Two pills on a phone: one line each; below 440px the icons make room for the label. */
 .nav-item { white-space: nowrap; }
 @media (max-width: 439px) { .nav-item { gap: 0; padding: 0 6px; font-size: 10px; letter-spacing: .06em; } .nav-item svg { display: none; } }
 

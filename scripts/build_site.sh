@@ -17,6 +17,10 @@ OUT="$ROOT/_site"
 # Full W3C datetime: Google reads <lastmod> for scheduling, date-only is coarser.
 BUILD_DATE="$(date -u +%Y-%m-%dT%H:%M:%S+00:00)"
 
+# Cookieless, self-hosted Umami. The pages on main carry this tag in their
+# <head>; the personal pages come from the private generator and get it here.
+UMAMI_TAG='<script defer src="https://insights.nichtlegacy.com/v.js" data-website-id="7a140aa1-9f8a-4378-9619-6e76a9bb376e" data-domains="recomendarr.nichtlegacy.com"></script>'
+
 # Empty the folder rather than replacing it, so a --serve already running from
 # it keeps serving and picks up the new files.
 mkdir -p "$OUT"
@@ -57,6 +61,11 @@ if [ -d "$ROOT/picks/u" ]; then
         -e 's|</svg>How it works</a>|</svg>How It Works</a>|g' \
         "$page" > "$page.tmp"
     mv "$page.tmp" "$page"
+    if ! grep -q 'insights\.nichtlegacy\.com/v\.js' "$page"; then
+      awk -v tag="$UMAMI_TAG" '!done && /<\/head>/ { sub(/<\/head>/, tag "\n</head>"); done = 1 } 1' \
+        "$page" > "$page.tmp"
+      mv "$page.tmp" "$page"
+    fi
     bust "$page"
   done < <(find "$OUT/u" -name index.html)
   pages="$(find "$OUT/u" -mindepth 2 -maxdepth 2 -name index.html | wc -l | tr -d ' ')"
@@ -65,6 +74,14 @@ fi
 # Any placeholder left behind would ship to production, so fail loudly instead.
 if grep -rq "__BUILD_DATE__\|__OG_V__\|{{[A-Z_]*}}" "$OUT"; then
   echo "unsubstituted placeholder left in _site" >&2
+  exit 1
+fi
+
+# Every page Pages serves should be counted; one without the tag is a gap nobody notices.
+untagged="$(find "$OUT" -name '*.html' -exec grep -L 'insights\.nichtlegacy\.com/v\.js' {} + || true)"
+if [ -n "$untagged" ]; then
+  echo "page without the Umami tag:" >&2
+  echo "$untagged" | sed "s|^$OUT/|  |" >&2
   exit 1
 fi
 

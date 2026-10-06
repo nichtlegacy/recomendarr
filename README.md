@@ -100,10 +100,9 @@ switching and navigation. GitHub Pages serves the showcase and paper; a build
 step checks local assets, links and CSV files before publication. Generated
 recommendation pages are stored separately from this public repository.
 
-The interface sets no cookies; self-hosted Umami counts visits anonymously.
-The engine reads public Letterboxd data; the rendered pages show
-recommendations and their explanations rather than reproducing a diary or
-reviews.
+The interface has no cookies or analytics. The engine reads public Letterboxd
+data; the rendered pages show recommendations and their explanations rather
+than reproducing a diary or reviews.
 
 ## Disclaimer
 
